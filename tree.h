@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define LOCATION __PRETTY_FUNCTION__, __FILE__, __LINE__
 #define tree_ctor(tree) tree_ctor_((tree), var_info {#tree, LOCATION})
@@ -33,7 +34,6 @@ enum operation
 
 //! @struct var_info
 //! @brief Information about tree to write to log
-//!
 //! @var name - name of tree
 //! @var func - function where tree created
 //! @var file - file where tree created
@@ -47,7 +47,6 @@ typedef struct
 } var_info;
 
 //! @brief Tree node struct
-//!
 //! @var type  - type of node (operation of number)
 //! @var valur - value of node
 //! @var left  - ptr to left child
@@ -61,7 +60,6 @@ typedef struct tree_node
 } tree_node_t;
 
 //! @brief Tree struct
-//!
 //! @var root   - root node ptr
 //! @var status - tree status
 //! @var info   - struct with info about tree
@@ -73,13 +71,11 @@ typedef struct
 } tree_t;
 
 //! @brief Tree constructor
-//!
 //! @param tree - ptr to tree
 //! @return 0 - Ok, 1 - else
 int tree_ctor_(tree_t * tree, var_info info);
 
 //! @brief Tree destructor
-//!
 //! @param tree - ptr to tree
 //! @return 0 - Ok
 int tree_dtor(tree_t * tree);

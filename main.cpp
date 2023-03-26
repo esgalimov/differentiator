@@ -3,6 +3,7 @@
 
 int main(void)
 {
+    open_log_file();
     tree_t tree = {};
 
     tree_ctor(&tree);
@@ -13,18 +14,18 @@ int main(void)
     tree_node_t * n5 = create_node(TYPE_NUM, 10);
 
     link_root(&tree, n1);
+    tree_dump(&tree);
     link_node(n1, n2, LEFT);
+    tree_dump(&tree);
     link_node(n1, n5, RIGHT);
+    tree_dump(&tree);
     link_node(n2, n3, LEFT);
+    tree_dump(&tree);
     link_node(n2, n4, RIGHT);
-
-    tree_print_inorder(n1);
-    printf("\n");
-    tree_print_preorder(n1);
-    printf("\n");
-    tree_print_postorder(n1);
+    tree_dump(&tree);
 
     tree_dtor(&tree);
+    close_log_file();
 
     return 0;
 }

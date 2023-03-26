@@ -18,6 +18,12 @@ int tree_dtor(tree_t * tree)
     nodes_dtor(tree->root);
 
     tree->status = 0;
+
+    #ifdef LOG_MODE
+        fprintf(log_file, "<pre>\nTree %p \"%s\" at %s at %s(%d): DESTRUCTED\n</pre>\n",
+                    tree, tree->info.name, tree->info.func, tree->info.file, tree->info.line);
+    #endif
+
     tree->info.file = NULL;
     tree->info.func = NULL;
     tree->info.line = 0;
