@@ -57,6 +57,7 @@ typedef struct tree_node
     elem_t      value;
     tree_node * left;
     tree_node * right;
+    tree_node * parent;
 } tree_node_t;
 
 //! @brief Tree struct

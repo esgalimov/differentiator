@@ -22,6 +22,7 @@ int main(void)
     link_node(n2, n3, LEFT);
     tree_dump(&tree);
     link_node(n2, n4, RIGHT);
+    n4->left = n4;
     tree_dump(&tree);
 
     tree_dtor(&tree);

@@ -78,29 +78,29 @@ void add_nodes(tree_node_t * node)
 
     if (node->type == TYPE_OP)
     {
-        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {OP} | {%c} | {%p | %p}}\",\n\
-                style=\"filled\", fillcolor=\"%s\"];\n", node, node, OPERATIONS[node->value - 1], node->left, node->right, BLUE);
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {OP} | {%c} | {%p | %p}}\",\n\
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, OPERATIONS[node->value - 1], node->left, node->right, BLUE);
     }
     else
     {
-        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {NUM} | {%d} | {%p | %p}}\",\n\
-                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->value, node->left, node->right, BLUE);
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {NUM} | {%d} | {%p | %p}}\",\n\
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, node->value, node->left, node->right, BLUE);
     }
     add_nodes(node->left);
     add_nodes(node->right);
 }
 
-void link_nodes(tree_node_t * node)
+void link_nodes_gr(tree_node_t * node)
 {
     if (node->left != NULL)
     {
         fprintf(graphviz_file, "    node_%p->node_%p [color = \"%s\"];\n", node, node->left, GREEN);
-        link_nodes(node->left);
+        link_nodes_gr(node->left);
     }
     if (node->right != NULL)
     {
         fprintf(graphviz_file, "    node_%p->node_%p [color = \"%s\"];\n", node, node->right, YELLOW);
-        link_nodes(node->right);
+        link_nodes_gr(node->right);
     }
 }
 
@@ -126,17 +126,24 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
 
     fprintf(log_file, "<pre>\n%s at %s(%d):\n", func, file, line);
 
-        fprintf(log_file, "Tree %p (<span style=\"color: green\">OK</span>) \"%s\" at %s at %s(%d):\n",
-                tree, tree->info.name, tree->info.func, tree->info.file, tree->info.line);
+    tree_verify(tree);
 
-        fprintf(log_file, "{\n    root = %p\n}", tree->root);
-        fprintf(log_file, "</pre>\n");
-
-    open_graphviz_file();
-    graphviz_init(tree);
-    add_nodes(tree->root);
-    link_nodes(tree->root);
-    close_graphviz_file();
+    if (tree->status == STATUS_OK)
+    {
+        fprintf(log_file, "Tree %p (<span style=\"color: green\">OK</span>) \"%s\" at %s at %s(%d):\n{root = %p}</pre>\n",
+                tree, tree->info.name, tree->info.func, tree->info.file, tree->info.line, tree->root);
+        open_graphviz_file();
+        graphviz_init(tree);
+        add_nodes(tree->root);
+        link_nodes_gr(tree->root);
+        close_graphviz_file();
+    }
+    else
+    {
+        fprintf(log_file, "Tree %p (<span style=\"color: red\">ERROR</span>) \"%s\" at %s at %s(%d):\n{root = %p}</pre>\n",
+                tree, tree->info.name, tree->info.func, tree->info.file, tree->info.line, tree->root);
+        error_number_translate(tree);
+    }
 
     system(graphviz_cmd);
 
@@ -145,4 +152,83 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
     fprintf(log_file, "<img src=\"./images/tree_dump%d.png\">\n", dump_cnt);
 
     return 0;
+}
+
+int tree_verify(tree_t * tree)
+{
+    ASSERT(tree != NULL);
+
+    node_verify(tree, tree->root);
+
+    return STATUS_OK;
+}
+
+void node_verify(tree_t * tree, tree_node_t * node)
+{
+    if (node == NULL) return;
+
+    if (node->type == TYPE_NUM)
+    {
+        if (node->left != NULL)
+            tree->status |= NUM_NODE_HAS_LEFT_CHILD;
+
+        if (node->right != NULL)
+            tree->status |= NUM_NODE_HAS_RIGHT_CHILD;
+    }
+
+    if (node == tree->root && tree->root->parent != NULL)
+        tree->status |= ROOT_HAVE_PARENT;
+
+    if (node != tree->root && node->parent == NULL)
+        tree->status |= NOT_ROOT_HAVE_NO_PARENT;
+
+    if (node->left != NULL && node->left == node->right)
+        tree->status |= LEFT_RIGHT_SAME;
+
+    if (node->parent != NULL && node->parent->left != node && node->parent->right != node)
+        tree->status |= WRONG_PARENT;
+
+    if (tree->status != STATUS_OK)
+        return;
+
+    node_verify(tree, node->left);
+    node_verify(tree, node->right);
+}
+
+void error_number_translate(tree_t * tree)
+{
+    ASSERT(tree != NULL);
+
+    int i = 0;
+
+    while (i < ERRORS_COUNT)
+    {
+        switch (tree->status & (1 << i))
+        {
+            case 0:
+                break;
+            case NUM_NODE_HAS_LEFT_CHILD:
+                fprintf(log_file, "Node with type num has left child\n");
+                break;
+            case NUM_NODE_HAS_RIGHT_CHILD:
+                fprintf(log_file, "Node with type num has right child\n");
+                break;
+            case ROOT_HAVE_PARENT:
+                fprintf(log_file, "Tree root have parent\n");
+                break;
+            case NOT_ROOT_HAVE_NO_PARENT:
+                fprintf(log_file, "Node that is not root has NULL parent\n");
+                break;
+            case LEFT_RIGHT_SAME:
+                fprintf(log_file, "Left and right children are the same\n");
+                break;
+            case WRONG_PARENT:
+                fprintf(log_file, "Parent of node has child of this node\n");
+                break;
+            default:
+                fprintf(log_file, "Unknown error\n");
+                break;
+        }
+        i++;
+    }
 }

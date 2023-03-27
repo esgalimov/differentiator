@@ -8,7 +8,7 @@ int tree_ctor_(tree_t * tree, var_info info)
     tree->root = NULL;
     tree->info = info;
 
-    return 0;
+    return STATUS_OK;
 }
 
 int tree_dtor(tree_t * tree)
@@ -28,7 +28,7 @@ int tree_dtor(tree_t * tree)
     tree->info.func = NULL;
     tree->info.line = 0;
 
-    return 0;
+    return STATUS_OK;
 }
 
 void nodes_dtor(tree_node_t * node)
@@ -44,12 +44,11 @@ int link_root(tree_t * tree, tree_node_t * root)
 {
     ASSERT(tree != NULL);
 
-    if (root == NULL)
-        return 1;
+    if (root == NULL) return LINK_NULL_ROOT;
 
     tree->root = root;
 
-    return 0;
+    return STATUS_OK;
 }
 
 tree_node_t * create_node(int type, elem_t value)
@@ -66,21 +65,24 @@ tree_node_t * create_node(int type, elem_t value)
     node->value = value;
     node->left = NULL;
     node->right = NULL;
+    node->parent = NULL;
 
     return node;
 }
 
 int link_node(tree_node_t * parent, tree_node_t * child, int mode)
 {
-    if (parent == NULL && child == NULL) return 1;
-    if (mode != LEFT && mode != RIGHT)   return 1;
+    if (parent == NULL || child == NULL) return NODE_LINK_ERROR;
+    if (mode != LEFT && mode != RIGHT)   return MODE_LINK_ERROR;
 
     if (mode == LEFT)
         parent->left = child;
     else
         parent->right = child;
 
-    return 0;
+    child->parent = parent;
+
+    return STATUS_OK;
 }
 
 void tree_print_preorder(tree_node_t * node)

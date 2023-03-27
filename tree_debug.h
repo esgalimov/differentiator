@@ -28,6 +28,24 @@
 
 #define OPERATIONS "+-*/"
 
+//! @brief Errors that can be with tree
+enum STATUS
+{
+    STATUS_OK                = 0 << 0,
+    NUM_NODE_HAS_LEFT_CHILD  = 1 << 0,
+    NUM_NODE_HAS_RIGHT_CHILD = 1 << 1,
+    NODE_CREATE_ERROR        = 1 << 2,
+    NODE_LINK_ERROR          = 1 << 3,
+    MODE_LINK_ERROR          = 1 << 4,
+    LINK_NULL_ROOT           = 1 << 5,
+    ROOT_HAVE_PARENT         = 1 << 6,
+    WRONG_PARENT             = 1 << 7,
+    LEFT_RIGHT_SAME          = 1 << 8,
+    NOT_ROOT_HAVE_NO_PARENT  = 1 << 9,
+};
+
+const int ERRORS_COUNT = 10;
+
 //! @brief File to generate graphviz picture
 extern FILE * graphviz_file;
 
@@ -61,7 +79,7 @@ void add_nodes(tree_node_t * node);
 
 //! @brief Link nodes in .dot file
 //! @param [in] node - ptr to node
-void link_nodes(tree_node_t * node);
+void link_nodes_gr(tree_node_t * node);
 
 //! @brief Tree dump
 //! Make .dot file using funcs above and use graphiz to make png picture of dump
@@ -77,6 +95,21 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line);
 //! cmd string buffer allocated with calloc (don't forget to free)
 //! @return ptr to string
 char * create_graphviz_cmd(void);
+
+//! @brief Verify tree, create number
+//! Summarize codes of mistakes to make number where each bit is concrete mistake
+//! @param [in] list - ptr to tree
+//! @return error number
+int tree_verify(tree_t * tree);
+
+//! @brief Verify node
+//! @param [in] node - ptr to node
+//! @return error number
+void node_verify(tree_t * tree, tree_node_t * node);
+
+//! @brief Write to log errors with using error number
+//! @param [in] error_number - error number what return tree verify
+void error_number_translate(tree_t * tree);
 
 
 #endif
