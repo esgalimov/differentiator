@@ -32,6 +32,13 @@ enum operation
     OP_DIV = 4,
 };
 
+enum print_mode
+{
+    PRE  = 1,
+    IN   = 2,
+    POST = 3,
+};
+
 //! @struct var_info
 //! @brief Information about tree to write to log
 //! @var name - name of tree
@@ -95,20 +102,24 @@ int link_root(tree_t * tree, tree_node_t * root);
 //! @param [in] type  - type of node
 //! @param [in] value - value of node
 //! @return ptr to node - if Ok, NULL - else
-tree_node_t * create_node(int type, elem_t value);
+tree_node_t * create_node(node_type type, elem_t value);
 
 //! @brief Link node
 //! @param [in] parent - ptr to parent node
 //! @param [in] child  - ptr to node to link
 //! @param [in] mode   - left or right child
 //! @return 0 - Ok, 1 - else
-int link_node(tree_node_t * parent, tree_node_t * child, int mode);
+int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode);
+
+//! @brief ...
+int tree_make_expression(tree_t * tree, print_mode mode);
 
 //! @brief Different type of print tree
 //! @param [in] node - ptr to start node
-void tree_print_preorder (tree_node_t * node);
-void tree_print_inorder  (tree_node_t * node);
-void tree_print_postorder(tree_node_t * node);
+//! @param [out] stream - ptr to file to write
+void tree_print_preorder (tree_node_t * node, FILE * stream);
+void tree_print_inorder  (tree_node_t * node, FILE * stream);
+void tree_print_postorder(tree_node_t * node, FILE * stream);
 
 
 #endif

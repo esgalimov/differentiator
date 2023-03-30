@@ -140,9 +140,10 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
     }
     else
     {
-        fprintf(log_file, "Tree %p (<span style=\"color: red\">ERROR</span>) \"%s\" at %s at %s(%d):\n{root = %p}</pre>\n",
+        fprintf(log_file, "Tree %p (<span style=\"color: red\">ERROR</span>) \"%s\" at %s at %s(%d):\n{root = %p}\n",
                 tree, tree->info.name, tree->info.func, tree->info.file, tree->info.line, tree->root);
         error_number_translate(tree);
+        fprintf(log_file, "</pre>\n");
     }
 
     system(graphviz_cmd);
@@ -188,6 +189,12 @@ void node_verify(tree_t * tree, tree_node_t * node)
     if (node->parent != NULL && node->parent->left != node && node->parent->right != node)
         tree->status |= WRONG_PARENT;
 
+    if (node == node->left || node == node->right)
+        tree->status |= CHILD_ITSELF;
+
+    if (node == node->parent)
+        tree->status |= PARENT_ITSELF;
+
     if (tree->status != STATUS_OK)
         return;
 
@@ -225,6 +232,12 @@ void error_number_translate(tree_t * tree)
             case WRONG_PARENT:
                 fprintf(log_file, "Parent of node has child of this node\n");
                 break;
+            case CHILD_ITSELF:
+                fprintf(log_file, "Node's child is the same node\n");
+                break;
+            case PARENT_ITSELF:
+                fprintf(log_file, "Node's parent is the same node\n");
+                break;
             default:
                 fprintf(log_file, "Unknown error\n");
                 break;
@@ -232,3 +245,12 @@ void error_number_translate(tree_t * tree)
         i++;
     }
 }
+
+// int check_ptr_access(const void * ptr)
+// {
+//     int fd = open("./tmp/debug.text", O_WRONLY);
+//     int ret = (int) write(fd, ptr, 1);
+//
+//     printf("%d", ret);
+//     return ret;
+// }

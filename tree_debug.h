@@ -2,6 +2,11 @@
 #define DEBUG_TREE
 
 #include "tree.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 
 #define LOG_MODE
 
@@ -9,7 +14,7 @@
     #define ASSERT(condition)                                                               \
         if (!(condition))                                                                   \
         {                                                                                   \
-            printf("\nError in \"%s\" in %d line in function %s in file %s\n",              \
+            fprintf(log_file, "\nError in \"%s\" in %d line in function %s in file %s\n",   \
                     #condition, __LINE__, __PRETTY_FUNCTION__, __FILE__);                   \
             abort();                                                                        \
         }
@@ -42,9 +47,11 @@ enum STATUS
     WRONG_PARENT             = 1 << 7,
     LEFT_RIGHT_SAME          = 1 << 8,
     NOT_ROOT_HAVE_NO_PARENT  = 1 << 9,
+    CHILD_ITSELF             = 1 << 10,
+    PARENT_ITSELF            = 1 << 11,
 };
 
-const int ERRORS_COUNT = 10;
+const int ERRORS_COUNT = 12;
 
 //! @brief File to generate graphviz picture
 extern FILE * graphviz_file;
@@ -110,6 +117,12 @@ void node_verify(tree_t * tree, tree_node_t * node);
 //! @brief Write to log errors with using error number
 //! @param [in] error_number - error number what return tree verify
 void error_number_translate(tree_t * tree);
+
+//! @brief Check access to pointer
+//! use fwrite to try write one byte from pointer
+//! @param [in] ptr - pointer to check
+//! @return 1 - if OK, else - if error
+int check_ptr_access(const void * ptr);
 
 
 #endif
