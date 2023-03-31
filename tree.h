@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define LOCATION __PRETTY_FUNCTION__, __FILE__, __LINE__
 #define tree_ctor(tree) tree_ctor_((tree), var_info {#tree, LOCATION})
@@ -111,6 +112,7 @@ tree_node_t * create_node(node_type type, elem_t value);
 //! @return 0 - Ok, 1 - else
 int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode);
 
+//----------------------diff part----should be in other file-------------------------------
 //! @brief ...
 int tree_make_expression(tree_t * tree, print_mode mode);
 
@@ -120,6 +122,15 @@ int tree_make_expression(tree_t * tree, print_mode mode);
 void tree_print_preorder (tree_node_t * node, FILE * stream);
 void tree_print_inorder  (tree_node_t * node, FILE * stream);
 void tree_print_postorder(tree_node_t * node, FILE * stream);
+
+//! @brief ...
+int tree_read_expression(tree_t * tree);
+
+//! @brief ...
+tree_node_t * tree_read_preorder(char * buffer, int * pos);
+
+//! @brief ...
+int is_operation(char ch);
 
 
 #endif

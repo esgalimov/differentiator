@@ -179,3 +179,114 @@ void tree_print_postorder(tree_node_t * node, FILE * stream)
                 fprintf(log_file, "<pre>Wrong operation</pre>\n");
         }
 }
+
+int tree_read_expression(tree_t * tree)
+{
+    FILE * fp = fopen("./read/expr.txt", "r");
+
+    if (fp == NULL)
+    {
+        fprintf(log_file, "<pre>Can't open file for read tree</pre>\n");
+        return 1;
+    }
+
+    fseek(fp, 0L, SEEK_END);
+    size_t filesize = (size_t) ftell(fp);
+    rewind(fp);
+
+    char * buffer = (char *) calloc(filesize + 1, sizeof(char));
+    fread(buffer, sizeof(char), filesize, fp);
+    *(buffer + filesize) = '\0';
+
+    int pos = 0;
+    link_root(tree, tree_read_preorder(buffer, &pos));
+
+    free(buffer);
+    return 0;
+}
+
+tree_node_t * tree_read_preorder(char * buffer, int * pos)
+{
+    char ch = '\0';
+    int cnt = 0;
+
+    sscanf(buffer + *pos, "%c%n", &ch, &cnt);
+    *pos += cnt;
+
+    if (ch == '(')
+    {
+        sscanf(buffer + *pos, "%c%n", &ch, &cnt);
+
+        if (is_operation(ch))
+        {
+            *pos += cnt;
+            operation op = OP_MUL;
+
+            switch (ch)
+            {
+                case '*':
+                    break;
+                case '+':
+                    op = OP_ADD;
+                    break;
+                case '-':
+                    op = OP_SUB;
+                    break;
+                case '/':
+                    op = OP_DIV;
+                    break;
+            }
+
+            tree_node_t * node_op = create_node(TYPE_OP, op);
+            tree_node_t * node_ch1 = tree_read_preorder(buffer, pos);
+            tree_node_t * node_ch2 = tree_read_preorder(buffer, pos);
+            link_node(node_op, node_ch1, LEFT);
+            link_node(node_op, node_ch2, RIGHT);
+
+            sscanf(buffer + *pos, "%c%n", &ch, &cnt);
+            if (ch != ')')
+            {
+               fprintf(log_file, "<pre>Must be \")\" after node</pre>\n");
+               return NULL;
+            }
+            *pos += cnt;
+
+            return node_op;
+        }
+
+        else if (isdigit(ch))
+        {
+            elem_t value = 0;
+            sscanf(buffer + *pos, "%d%n", &value, &cnt);
+            tree_node_t * node_num = create_node(TYPE_NUM, value);
+            *pos += cnt;
+
+            sscanf(buffer + *pos, "%c%n", &ch, &cnt);
+            if (ch != ')')
+            {
+               fprintf(log_file, "<pre>Must be \")\" after node</pre>\n");
+               return NULL;
+            }
+            *pos += cnt;
+
+            return node_num;
+        }
+        else
+        {
+            fprintf(log_file, "<pre>Undefind symbol</pre>\n");
+            return NULL;
+        }
+    }
+    else
+    {
+        fprintf(log_file, "<pre>Must start with \"(\" | ch = %c | pos = %d |</pre>\n", ch, *pos);
+        return NULL;
+    }
+}
+
+int is_operation(char ch)
+{
+    if (ch == '*' || ch == '/' || ch == '+' || ch == '-')
+        return 1;
+    return 0;
+}

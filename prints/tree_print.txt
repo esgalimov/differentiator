@@ -1,7 +1,1 @@
-push 5
-push 7
-add
-push 10
-mul
-out
-hlt
+(*(+(5)(7))(10))

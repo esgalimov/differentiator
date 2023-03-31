@@ -104,25 +104,13 @@ void link_nodes_gr(tree_node_t * node)
     }
 }
 
-char * create_graphviz_cmd(void)
-{
-    dump_cnt++;
-    const char * begin_cmd = "dot ./tmp/graphviz.dot -Tpng -o ./logs/images/tree_dump";
-    const char * end_cmd = ".png";
-    char * cmd = (char *) calloc(100, sizeof(char));
-
-    strcat(cmd, begin_cmd);
-    snprintf(cmd + strlen(begin_cmd), 20, "%d", dump_cnt);
-    strcat(cmd, end_cmd);
-
-    return cmd;
-}
-
 int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
 {
     ASSERT(tree != NULL);
 
-    char * graphviz_cmd = create_graphviz_cmd();
+    dump_cnt++;
+    char graphviz_cmd[200] = "dot ./tmp/graphviz.dot -Tpng -o ./logs/images/tree_dump";
+    snprintf(graphviz_cmd + strlen(graphviz_cmd), 30, "%d.png", dump_cnt);
 
     fprintf(log_file, "<pre>\n%s at %s(%d):\n", func, file, line);
 
@@ -147,8 +135,6 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
     }
 
     system(graphviz_cmd);
-
-    free(graphviz_cmd);
 
     fprintf(log_file, "<img src=\"./images/tree_dump%d.png\">\n", dump_cnt);
 

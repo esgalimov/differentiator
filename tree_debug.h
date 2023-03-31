@@ -97,12 +97,6 @@ void link_nodes_gr(tree_node_t * node);
 //! @return 0
 int tree_dump_(tree_t * tree, const char * func, const char * file, int line);
 
-//! @brief Func create string with graphiz console command (make png from .dot file)
-//! it use global variable 'dump_number' to create name of next picture
-//! cmd string buffer allocated with calloc (don't forget to free)
-//! @return ptr to string
-char * create_graphviz_cmd(void);
-
 //! @brief Verify tree, create number
 //! Summarize codes of mistakes to make number where each bit is concrete mistake
 //! @param [in] list - ptr to tree
