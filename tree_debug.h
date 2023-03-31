@@ -2,11 +2,7 @@
 #define DEBUG_TREE
 
 #include "tree.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-
+#include "diff.h"
 
 #define LOG_MODE
 
@@ -82,11 +78,11 @@ int graphviz_init(tree_t * tree);
 
 //! @brief Add nodes into .dot file to use graphiz
 //! @param [in] node - ptr to node
-void add_nodes(tree_node_t * node);
+void add_nodes(const tree_node_t * node);
 
 //! @brief Link nodes in .dot file
 //! @param [in] node - ptr to node
-void link_nodes_gr(tree_node_t * node);
+void link_nodes_gr(const tree_node_t * node);
 
 //! @brief Tree dump
 //! Make .dot file using funcs above and use graphiz to make png picture of dump
@@ -106,14 +102,14 @@ int tree_verify(tree_t * tree);
 //! @brief Verify node
 //! @param [in] node - ptr to node
 //! @return error number
-void node_verify(tree_t * tree, tree_node_t * node);
+void node_verify(tree_t * tree, const tree_node_t * node);
 
 //! @brief Write to log errors with using error number
 //! @param [in] error_number - error number what return tree verify
 void error_number_translate(tree_t * tree);
 
 //! @brief Dump subtree (part of tree from particular node)
-int subtree_dump(tree_node_t * node);
+int subtree_dump(const tree_node_t * node);
 
 // //! @brief Check access to pointer
 // //! use fwrite to try write one byte from pointer

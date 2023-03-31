@@ -67,12 +67,14 @@ int graphviz_init(tree_t * tree)
 
     fprintf(graphviz_file, "digraph\n{\n");
     fprintf(graphviz_file, "    node_info[shape = record, label = \"{root = %p}\"];\n\n", tree->root);
-    fprintf(graphviz_file, "    node_info->node_%p [color = \"%s\"];\n", tree->root, GREEN);
+
+    if (tree->root != NULL)
+        fprintf(graphviz_file, "    node_info->node_%p [color = \"%s\"];\n", tree->root, GREEN);
 
     return STATUS_OK;
 }
 
-void add_nodes(tree_node_t * node)
+void add_nodes(const tree_node_t * node)
 {
     if (node == NULL) return;
 
@@ -90,8 +92,10 @@ void add_nodes(tree_node_t * node)
     add_nodes(node->right);
 }
 
-void link_nodes_gr(tree_node_t * node)
+void link_nodes_gr(const tree_node_t * node)
 {
+    if (node == NULL) return;
+
     if (node->left != NULL)
     {
         fprintf(graphviz_file, "    node_%p->node_%p [color = \"%s\"];\n", node, node->left, GREEN);
@@ -142,7 +146,7 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
     return STATUS_OK;
 }
 
-int subtree_dump(tree_node_t * node)
+int subtree_dump(const tree_node_t * node)
 {
     ASSERT(log_file != NULL);
 
@@ -173,7 +177,7 @@ int tree_verify(tree_t * tree)
     return STATUS_OK;
 }
 
-void node_verify(tree_t * tree, tree_node_t * node)
+void node_verify(tree_t * tree, const tree_node_t * node)
 {
     if (node == NULL) return;
 

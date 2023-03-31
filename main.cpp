@@ -1,5 +1,6 @@
 #include "tree.h"
 #include "tree_debug.h"
+#include "diff.h"
 
 int main(void)
 {
@@ -7,10 +8,12 @@ int main(void)
     tree_t tree = {};
     tree_ctor(&tree);
 
-    tree_read_expression(&tree);
-    tree_make_expression(&tree, PRE);
+    tree_read_expression(&tree, "./read/expr.txt");
+    tree_make_expression(&tree, PRE, "./prints/tree_print.txt");
+
+    printf("result = %d", eval(tree.root));
+
     tree_dump(&tree);
-    subtree_dump(tree.root->left);
 
     tree_dtor(&tree);
     close_log_file();
