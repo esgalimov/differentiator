@@ -10,6 +10,7 @@ int main(void)
     tree_read_expression(&tree);
     tree_make_expression(&tree, PRE);
     tree_dump(&tree);
+    subtree_dump(tree.root->left);
 
     tree_dtor(&tree);
     close_log_file();

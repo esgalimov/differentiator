@@ -247,6 +247,7 @@ tree_node_t * tree_read_preorder(char * buffer, int * pos)
             if (ch != ')')
             {
                fprintf(log_file, "<pre>Must be \")\" after node</pre>\n");
+               subtree_dump(node_op);
                return NULL;
             }
             *pos += cnt;
@@ -265,6 +266,7 @@ tree_node_t * tree_read_preorder(char * buffer, int * pos)
             if (ch != ')')
             {
                fprintf(log_file, "<pre>Must be \")\" after node</pre>\n");
+               subtree_dump(node_num);
                return NULL;
             }
             *pos += cnt;

@@ -112,11 +112,14 @@ void node_verify(tree_t * tree, tree_node_t * node);
 //! @param [in] error_number - error number what return tree verify
 void error_number_translate(tree_t * tree);
 
-//! @brief Check access to pointer
-//! use fwrite to try write one byte from pointer
-//! @param [in] ptr - pointer to check
-//! @return 1 - if OK, else - if error
-int check_ptr_access(const void * ptr);
+//! @brief Dump subtree (part of tree from particular node)
+int subtree_dump(tree_node_t * node);
+
+// //! @brief Check access to pointer
+// //! use fwrite to try write one byte from pointer
+// //! @param [in] ptr - pointer to check
+// //! @return 1 - if OK, else - if error
+// int check_ptr_access(const void * ptr);
 
 
 #endif

@@ -69,7 +69,7 @@ int graphviz_init(tree_t * tree)
     fprintf(graphviz_file, "    node_info[shape = record, label = \"{root = %p}\"];\n\n", tree->root);
     fprintf(graphviz_file, "    node_info->node_%p [color = \"%s\"];\n", tree->root, GREEN);
 
-    return 0;
+    return STATUS_OK;
 }
 
 void add_nodes(tree_node_t * node)
@@ -107,6 +107,7 @@ void link_nodes_gr(tree_node_t * node)
 int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
 {
     ASSERT(tree != NULL);
+    ASSERT(log_file != NULL);
 
     dump_cnt++;
     char graphviz_cmd[200] = "dot ./tmp/graphviz.dot -Tpng -o ./logs/images/tree_dump";
@@ -138,7 +139,29 @@ int tree_dump_(tree_t * tree, const char * func, const char * file, int line)
 
     fprintf(log_file, "<img src=\"./images/tree_dump%d.png\">\n", dump_cnt);
 
-    return 0;
+    return STATUS_OK;
+}
+
+int subtree_dump(tree_node_t * node)
+{
+    ASSERT(log_file != NULL);
+
+    fprintf(log_file, "<pre>Subtree dump: root = %p</pre>\n", node);
+
+    dump_cnt++;
+    char graphviz_cmd[200] = "dot ./tmp/graphviz.dot -Tpng -o ./logs/images/tree_dump";
+    snprintf(graphviz_cmd + strlen(graphviz_cmd), 30, "%d.png", dump_cnt);
+
+    open_graphviz_file();
+    fprintf(graphviz_file, "digraph\n{\n");
+    add_nodes(node);
+    link_nodes_gr(node);
+    close_graphviz_file();
+
+    system(graphviz_cmd);
+    fprintf(log_file, "<img src=\"./images/tree_dump%d.png\">\n", dump_cnt);
+
+    return STATUS_OK;
 }
 
 int tree_verify(tree_t * tree)
