@@ -55,16 +55,14 @@ void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
             case TYPE_SIN: fprintf(stream, "sin("); break;
             case TYPE_COS: fprintf(stream, "cos("); break;
             case TYPE_LN:  fprintf(stream, "ln(");  break;
-            case TYPE_POW: tree_print_preorder(node->left, stream); // may be it shouldn't be like that, I'll check it later
-                           fprintf(stream, "^(");   break;
+            case TYPE_POW: fprintf(stream, "^(");   break;
             case TYPE_LOG: fprintf(stream, "log("); break;
             case TYPE_EXP: fprintf(stream, "exp("); break;
 
         }
     }
-    if (node->type != TYPE_POW)
-        tree_print_preorder(node->left, stream);
 
+    tree_print_preorder(node->left, stream);
     tree_print_preorder(node->right, stream);
 
     if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
