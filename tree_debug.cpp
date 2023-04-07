@@ -95,8 +95,6 @@ void add_nodes(const tree_node_t * node)
     }
     else
     {
-        const char FUNCS[6][4] = {"SIN", "COS", "LN", "POW", "LOG", "EXP"}; // кринж
-
         fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {FUNC} | {%s} | {%p | %p}}\",\n\
                 style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, FUNCS[node->type - 6], node->left, node->right, PINK);
     }

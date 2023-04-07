@@ -94,7 +94,7 @@ tree_node_t * create_var(char value)
 
 tree_node_t * create_func(node_type func, tree_node_t * left, tree_node_t * right)
 {
-    return create_node(func, 0, left, right);
+    return create_node(func, 0, right, left);
 }
 
 int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode)
@@ -110,4 +110,18 @@ int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode)
     child->parent = parent;
 
     return STATUS_OK;
+}
+
+tree_node_t * copy_subtree(tree_node_t * node)
+{
+    if (node == NULL) return NULL;
+
+    if (node->type == TYPE_NUM) return create_num(node->value);
+
+    else if (node->type == TYPE_VAR) return create_var((char) node->value);
+
+    else if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
+        return create_op((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));
+    else
+        return create_func((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));
 }

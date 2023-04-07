@@ -24,7 +24,7 @@ int tree_make_expression(tree_t * tree, print_mode mode, const char * filename)
            tree_print_inorder(tree->root, fp);
            break;
         case POST:
-           tree_print_postorder(tree->root, fp);
+           //tree_print_postorder(tree->root, fp);
            fprintf(fp, "out\nhlt\n");
            break;
         default:
@@ -43,11 +43,32 @@ void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
 
     if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
         fprintf(stream, "%c", OPERATIONS[node->type - 1]);
-    else
+    else if (node->type == TYPE_NUM)
         fprintf(stream, "%d", node->value);
+    else if (node->type == TYPE_VAR)
+        fprintf(stream, "%c", (char) node->value);
+    else
+    {
+        switch (node->type)
+        {
+            case TYPE_SIN: fprintf(stream, "sin("); break;
+            case TYPE_COS: fprintf(stream, "cos("); break;
+            case TYPE_LN:  fprintf(stream, "ln(");  break;
+            case TYPE_POW: tree_print_preorder(node->left, stream); // may be it shouldn't be like that, I'll check it later
+                           fprintf(stream, "^(");   break;
+            case TYPE_LOG: fprintf(stream, "log("); break;
+            case TYPE_EXP: fprintf(stream, "exp("); break;
 
-    tree_print_preorder(node->left, stream);
+        }
+    }
+    if (node->type != TYPE_POW)
+        tree_print_preorder(node->left, stream);
+
     tree_print_preorder(node->right, stream);
+
+    if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
+        fprintf(stream, ")");
+
     fprintf(stream, ")");
 }
 
@@ -56,18 +77,38 @@ void tree_print_inorder(tree_node_t * node, FILE * stream) //(((5)+(7))*(10))
     if (node == NULL) return;
 
     fprintf(stream, "(");
-    tree_print_inorder(node->left, stream);
+
+    if (node->type != TYPE_LOG)
+        tree_print_inorder(node->left, stream);
 
     if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
         fprintf(stream, "%c", OPERATIONS[node->type - 1]);
-    else
+    else if (node->type == TYPE_NUM)
         fprintf(stream, "%d", node->value);
+    else if (node->type == TYPE_VAR)
+        fprintf(stream, "%c", (char) node->value);
+    else
+    {
+        switch (node->type)
+        {
+            case TYPE_SIN: fprintf(stream, "sin(");     break;
+            case TYPE_COS: fprintf(stream, "cos(");     break;
+            case TYPE_LN:  fprintf(stream, "ln(");      break;
+            case TYPE_POW: fprintf(stream, "^(");       break;
+            case TYPE_LOG: fprintf(stream, "log(");
+                tree_print_inorder(node->left, stream); break;
+            case TYPE_EXP: fprintf(stream, "exp(");     break;
+        }
+    }
 
     tree_print_inorder(node->right, stream);
+    if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
+        fprintf(stream, ")");
     fprintf(stream, ")");
 }
 
-void tree_print_postorder(tree_node_t * node, FILE * stream)
+/*
+void tree_print_postorder(tree_node_t * node, FILE * stream) // пока не трогаю
 {
     if (node == NULL) return;
 
@@ -94,7 +135,7 @@ void tree_print_postorder(tree_node_t * node, FILE * stream)
             default:
                 fprintf(log_file, "<pre>Wrong operation</pre>\n");
         }
-}
+}*/
 
 int tree_read_expression(tree_t * tree, const char * filename)
 {
@@ -246,3 +287,8 @@ int eval(const tree_node_t * node)
             return NULL_EVAL;
     }
 }
+
+// tree_node_t * differentiate(tree_node_t * node)
+// {
+//
+// }

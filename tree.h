@@ -115,4 +115,7 @@ tree_node_t * create_func(node_type func, tree_node_t * left = NULL, tree_node_t
 //! @return 0 - Ok, 1 - else
 int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode);
 
+//! @brief Copy subtree...
+tree_node_t * copy_subtree(tree_node_t * node);
+
 #endif

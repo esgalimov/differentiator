@@ -23,7 +23,7 @@ int tree_make_expression(tree_t * tree, print_mode mode, const char * filename);
 //! @param [out] stream - ptr to file to write
 void tree_print_preorder (tree_node_t * node, FILE * stream);
 void tree_print_inorder  (tree_node_t * node, FILE * stream);
-void tree_print_postorder(tree_node_t * node, FILE * stream);
+//void tree_print_postorder(tree_node_t * node, FILE * stream);
 
 //! @brief ...
 int tree_read_expression(tree_t * tree, const char * filename);

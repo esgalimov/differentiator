@@ -34,6 +34,7 @@
 #define OPERATIONS "+-*/"
 
 //#define FUNCS "SIN", "COS", "LN", "POW", "LOG", "EXP"
+const char FUNCS[6][10] = {"SIN", "COS", "LN", "^", "LOG", "EXP"};
 
 //! @brief Errors that can be with tree
 enum STATUS
