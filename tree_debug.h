@@ -20,14 +20,20 @@
     #define tree_dump(list)
 #endif
 
-#define BLUE   "#87CEEB"
-#define D_BLUE "#0000CD"
-#define RED    "#FFD0D0"
-#define D_RED  "#DC143C"
-#define YELLOW "#F0E68C"
-#define GREEN  "#98FB98"
+#define BLUE       "#87CEEB"
+#define D_BLUE     "#0000CD"
+#define L_BLUE     "#AFEEEE"
+#define RED        "#FFD0D0"
+#define D_RED      "#DC143C"
+#define PINK       "#E6E6FA"
+#define YELLOW     "#F0E68C"
+#define L_YELLOW   "#FFFDC2"
+#define GREEN      "#98FB98"
+#define L_GREEN    "#E7F8BC"
 
 #define OPERATIONS "+-*/"
+
+//#define FUNCS "SIN", "COS", "LN", "POW", "LOG", "EXP"
 
 //! @brief Errors that can be with tree
 enum STATUS

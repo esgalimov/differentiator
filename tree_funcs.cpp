@@ -53,11 +53,8 @@ int link_root(tree_t * tree, tree_node_t * root)
     return STATUS_OK;
 }
 
-tree_node_t * create_node(node_type type, elem_t value)
+tree_node_t * create_node(node_type type, elem_t value, tree_node_t * left, tree_node_t * right)
 {
-    if (type != TYPE_NUM && type != TYPE_OP)
-        return NULL;
-
     tree_node_t * node = (tree_node_t *) calloc(1, sizeof(tree_node_t));
 
     if (node == NULL)
@@ -65,11 +62,39 @@ tree_node_t * create_node(node_type type, elem_t value)
 
     node->type = type;
     node->value = value;
-    node->left = NULL;
-    node->right = NULL;
-    node->parent = NULL;
+
+    if (left != NULL)
+    {
+        left->parent = node;
+        node->left = left;
+    }
+    if (right != NULL)
+    {
+        right->parent = node;
+        node->right = right;
+    }
 
     return node;
+}
+
+tree_node_t * create_num(elem_t value)
+{
+    return create_node(TYPE_NUM, value);
+}
+
+tree_node_t * create_op(node_type oper, tree_node_t * left, tree_node_t * right)
+{
+    return create_node(oper, 0, left, right);
+}
+
+tree_node_t * create_var(char value)
+{
+    return create_node(TYPE_VAR, (elem_t) value);
+}
+
+tree_node_t * create_func(node_type func, tree_node_t * left, tree_node_t * right)
+{
+    return create_node(func, 0, left, right);
 }
 
 int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode)

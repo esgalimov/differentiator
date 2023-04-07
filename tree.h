@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 #define LOCATION __PRETTY_FUNCTION__, __FILE__, __LINE__
 #define tree_ctor(tree) tree_ctor_((tree), var_info {#tree, LOCATION})
@@ -15,7 +16,17 @@ typedef int elem_t;
 enum node_type
 {
     TYPE_NUM = 0,
-    TYPE_OP  = 1,
+    TYPE_ADD = 1,
+    TYPE_SUB = 2,
+    TYPE_MUL = 3,
+    TYPE_DIV = 4,
+    TYPE_VAR = 5,
+    TYPE_SIN = 6,
+    TYPE_COS = 7,
+    TYPE_LN  = 8,
+    TYPE_POW = 9,
+    TYPE_LOG = 10,
+    TYPE_EXP = 11,
 };
 
 //! @brief Link modes
@@ -23,14 +34,6 @@ enum link_mode
 {
     LEFT  = 0,
     RIGHT = 1,
-};
-
-enum operation
-{
-    OP_ADD = 1,
-    OP_SUB = 2,
-    OP_MUL = 3,
-    OP_DIV = 4,
 };
 
 //! @struct var_info
@@ -96,7 +99,14 @@ int link_root(tree_t * tree, tree_node_t * root);
 //! @param [in] type  - type of node
 //! @param [in] value - value of node
 //! @return ptr to node - if Ok, NULL - else
-tree_node_t * create_node(node_type type, elem_t value);
+tree_node_t * create_node(node_type type, elem_t value, tree_node_t * left = NULL, tree_node_t * right = NULL);
+
+//! @brief Create diffenrent types of nodes, this funcs use create_node func
+tree_node_t * create_num(elem_t value);
+tree_node_t * create_op(node_type oper, tree_node_t * left = NULL, tree_node_t * right = NULL);
+tree_node_t * create_var(char value);
+tree_node_t * create_func(node_type func, tree_node_t * left = NULL, tree_node_t * right = NULL);
+
 
 //! @brief Link node
 //! @param [in] parent - ptr to parent node

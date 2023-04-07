@@ -78,15 +78,27 @@ void add_nodes(const tree_node_t * node)
 {
     if (node == NULL) return;
 
-    if (node->type == TYPE_OP)
+    if (node->type == TYPE_NUM)
+    {
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {NUM} | {%d} | {%p | %p}}\",\n\
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, node->value, node->left, node->right, L_GREEN);
+    }
+    else if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
     {
         fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {OP} | {%c} | {%p | %p}}\",\n\
-                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, OPERATIONS[node->value - 1], node->left, node->right, BLUE);
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, OPERATIONS[node->type - 1], node->left, node->right, L_YELLOW);
+    }
+    else if (node->type == TYPE_VAR)
+    {
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {VAR} | {%c} | {%p | %p}}\",\n\
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, (char) node->value, node->left, node->right, L_BLUE);
     }
     else
     {
-        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {NUM} | {%d} | {%p | %p}}\",\n\
-                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, node->value, node->left, node->right, BLUE);
+        const char FUNCS[6][4] = {"SIN", "COS", "LN", "POW", "LOG", "EXP"}; // кринж
+
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {FUNC} | {%s} | {%p | %p}}\",\n\
+                style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, FUNCS[node->type - 6], node->left, node->right, PINK);
     }
     add_nodes(node->left);
     add_nodes(node->right);

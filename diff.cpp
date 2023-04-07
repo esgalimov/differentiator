@@ -41,8 +41,8 @@ void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
 
     fprintf(stream, "(");
 
-    if (node->type == TYPE_OP)
-        fprintf(stream, "%c", OPERATIONS[node->value - 1]);
+    if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
+        fprintf(stream, "%c", OPERATIONS[node->type - 1]);
     else
         fprintf(stream, "%d", node->value);
 
@@ -58,8 +58,8 @@ void tree_print_inorder(tree_node_t * node, FILE * stream) //(((5)+(7))*(10))
     fprintf(stream, "(");
     tree_print_inorder(node->left, stream);
 
-    if (node->type == TYPE_OP)
-        fprintf(stream, "%c", OPERATIONS[node->value - 1]);
+    if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
+        fprintf(stream, "%c", OPERATIONS[node->type - 1]);
     else
         fprintf(stream, "%d", node->value);
 
@@ -77,18 +77,18 @@ void tree_print_postorder(tree_node_t * node, FILE * stream)
     if (node->type == TYPE_NUM)
         fprintf(stream, "push %d\n", node->value);
     else
-        switch (node->value)
+        switch (node->type)
         {
-            case OP_ADD:
+            case TYPE_ADD:
                 fprintf(stream, "add\n");
                 break;
-            case OP_SUB:
+            case TYPE_SUB:
                 fprintf(stream, "sub\n");
                 break;
-            case OP_MUL:
+            case TYPE_MUL:
                 fprintf(stream, "mul\n");
                 break;
-            case OP_DIV:
+            case TYPE_DIV:
                 fprintf(stream, "div\n");
                 break;
             default:
@@ -136,28 +136,26 @@ tree_node_t * tree_read_preorder(char * buffer, int * pos)
         if (is_operation(ch))
         {
             *pos += cnt;
-            operation op = OP_MUL;
+            node_type op = TYPE_MUL;
 
             switch (ch)
             {
                 case '*':
                     break;
                 case '+':
-                    op = OP_ADD;
+                    op = TYPE_ADD;
                     break;
                 case '-':
-                    op = OP_SUB;
+                    op = TYPE_SUB;
                     break;
                 case '/':
-                    op = OP_DIV;
+                    op = TYPE_DIV;
                     break;
             }
 
-            tree_node_t * node_op = create_node(TYPE_OP, op);
             tree_node_t * node_ch1 = tree_read_preorder(buffer, pos);
             tree_node_t * node_ch2 = tree_read_preorder(buffer, pos);
-            link_node(node_op, node_ch1, LEFT);
-            link_node(node_op, node_ch2, RIGHT);
+            tree_node_t * node_op = create_op(op, node_ch1, node_ch2);
 
             sscanf(buffer + *pos, "%c%n", &ch, &cnt);
             if (ch != ')')
@@ -175,7 +173,7 @@ tree_node_t * tree_read_preorder(char * buffer, int * pos)
         {
             elem_t value = 0;
             sscanf(buffer + *pos, "%d%n", &value, &cnt);
-            tree_node_t * node_num = create_node(TYPE_NUM, value);
+            tree_node_t * node_num = create_num(value);
             *pos += cnt;
 
             sscanf(buffer + *pos, "%c%n", &ch, &cnt);
@@ -219,18 +217,18 @@ int eval(const tree_node_t * node)
     if (node->type == TYPE_NUM)
         return node->value;
 
-    switch (node->value)
+    switch (node->type)
     {
-        case OP_ADD:
+        case TYPE_ADD:
             return eval(node->left) + eval(node->right);
 
-        case OP_SUB:
+        case TYPE_SUB:
             return eval(node->left) - eval(node->right);
 
-        case OP_MUL:
+        case TYPE_MUL:
             return eval(node->left) * eval(node->right);
 
-        case OP_DIV:
+        case TYPE_DIV:
         {
             int eval_right = eval(node->right);
 
