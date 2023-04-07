@@ -94,6 +94,9 @@ tree_node_t * create_var(char value)
 
 tree_node_t * create_func(node_type func, tree_node_t * left, tree_node_t * right)
 {
+    if (func == TYPE_LOG || func == TYPE_POW)
+        return create_node(func, 0, left, right);
+
     return create_node(func, 0, right, left);
 }
 

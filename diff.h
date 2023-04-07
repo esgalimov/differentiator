@@ -37,4 +37,7 @@ int is_operation(char ch);
 //! @brief Eval ...
 int eval(const tree_node_t * node);
 
+//! @brief Diff ...
+tree_node_t * diff(tree_node_t * node);
+
 #endif

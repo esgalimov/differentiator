@@ -1,6 +1,7 @@
 #include "tree.h"
 #include "tree_debug.h"
 #include "diff.h"
+#include "dsl.h"
 
 
 int tree_make_expression(tree_t * tree, print_mode mode, const char * filename)
@@ -288,7 +289,39 @@ int eval(const tree_node_t * node)
     }
 }
 
-// tree_node_t * differentiate(tree_node_t * node)
-// {
-//
-// }
+tree_node_t * diff(tree_node_t * node)
+{
+    if (node == NULL) return NULL;
+
+    switch (node->type)
+    {
+        case TYPE_NUM: return NUM(0);
+        case TYPE_VAR: return NUM(1);
+        case TYPE_ADD: return ADD(dL, dR);
+        case TYPE_SUB: return SUB(dL, dR);
+        case TYPE_MUL: return ADD(MUL(dL, cR), MUL(cL, dR));
+        case TYPE_DIV: return DIV(SUB(MUL(dL, cR), MUL(cL, dR)), MUL(cR, cR));
+        case TYPE_SIN: return MUL(COS(cR), dR);
+        case TYPE_COS: return MUL(MUL(NUM(-1), SIN(cR)), dR);
+        case TYPE_LN:  return DIV(dR, cR);
+        case TYPE_POW:
+        {
+            if (node->left->type == TYPE_NUM && node->right->type == TYPE_NUM)
+                return NUM(0);
+            else if (node->left->type == TYPE_NUM && node->right->type != TYPE_NUM)
+                return MUL(MUL(POW(cL, cR), LN(cL)), dR);
+            else if (node->left->type != TYPE_NUM && node->right->type == TYPE_NUM)
+                return MUL(MUL(cR, POW(cL, NUM(node->right->value - 1))), dL);
+            else
+            {
+                tree_node_t * node_pow   = POW(cL, cR),
+                            * node_sum_1 = DIV(MUL(dL, cR), cL),
+                            * node_sum_2 = MUL(dR, LN(cL));
+                return MUL(node_pow, ADD(node_sum_1, node_sum_2));
+            }
+        }
+        case TYPE_LOG: return DIV(dR, MUL(LN(node->left), cR));
+        case TYPE_EXP: return MUL(EXP(cR), dR);
+        default: return NULL;
+    }
+}

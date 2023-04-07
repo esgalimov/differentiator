@@ -21,13 +21,17 @@ int main(void)
 
     link_root(&tree, n3);
 
-    tree_node_t * n = copy_subtree(tree.root->right);
-    subtree_dump(n);
+    tree_t tree1 = {};
+    tree_ctor(&tree1);
 
-    tree_make_expression(&tree, PRE, "./prints/tree_print.txt");
+    tree1.root = diff(tree.root);
+
+    tree_make_expression(&tree1, IN, "./prints/tree_print.txt");
 
     tree_dump(&tree);
+    tree_dump(&tree1);
 
+    tree_dtor(&tree1);
     tree_dtor(&tree);
     close_log_file();
 
