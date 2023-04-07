@@ -11,6 +11,7 @@
 #define EXP(R)    create_func(TYPE_EXP, R)
 
 #define NUM(x) create_num(x)
+#define VAR(x) create_var(x)
 
 #define dL  diff(node->left)
 #define dR diff(node->right)
