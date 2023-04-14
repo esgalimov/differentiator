@@ -10,7 +10,7 @@
 #define LOCATION __PRETTY_FUNCTION__, __FILE__, __LINE__
 #define tree_ctor(tree) tree_ctor_((tree), var_info {#tree, LOCATION})
 
-typedef int elem_t;
+typedef double elem_t;
 
 //! @brief Types of node
 enum node_type
@@ -73,6 +73,7 @@ typedef struct
     tree_node_t * root;
     int           status;
     var_info      info;
+    int           symplify;
 } tree_t;
 
 //! @brief Tree constructor

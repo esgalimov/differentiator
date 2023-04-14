@@ -80,7 +80,7 @@ void add_nodes(const tree_node_t * node)
 
     if (node->type == TYPE_NUM)
     {
-        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {NUM} | {%d} | {%p | %p}}\",\n\
+        fprintf(graphviz_file, "    node_%p[shape = Mrecord, label = \"{{%p} | {parent =  %p} | {NUM} | {%lg} | {%p | %p}}\",\n\
                 style=\"filled\", fillcolor=\"%s\"];\n", node, node, node->parent, node->value, node->left, node->right, L_GREEN);
     }
     else if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)

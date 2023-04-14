@@ -7,6 +7,8 @@ int tree_ctor_(tree_t * tree, var_info info)
 
     tree->root = NULL;
     tree->info = info;
+    tree->status = 0;
+    tree->symplify = 0;
 
     return STATUS_OK;
 }
@@ -84,7 +86,7 @@ tree_node_t * create_num(elem_t value)
 
 tree_node_t * create_op(node_type oper, tree_node_t * left, tree_node_t * right)
 {
-    return create_node(oper, 0, left, right);
+    return create_node(oper, NAN, left, right);
 }
 
 tree_node_t * create_var(char value)
@@ -95,9 +97,9 @@ tree_node_t * create_var(char value)
 tree_node_t * create_func(node_type func, tree_node_t * left, tree_node_t * right)
 {
     if (func == TYPE_LOG || func == TYPE_POW)
-        return create_node(func, 0, left, right);
+        return create_node(func, NAN, left, right);
 
-    return create_node(func, 0, right, left);
+    return create_node(func, NAN, right, left);
 }
 
 int link_node(tree_node_t * parent, tree_node_t * child, link_mode mode)

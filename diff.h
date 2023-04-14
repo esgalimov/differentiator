@@ -15,6 +15,9 @@ enum print_mode
 //! @brief Return bad value in eval
 const int NULL_EVAL = (const int) 0xDEADBEAF;
 
+//! @brief
+const double EPS = 0.000001;
+
 //! @brief ...
 int tree_make_expression(tree_t * tree, print_mode mode, const char * filename);
 
@@ -46,7 +49,10 @@ tree_node_t * get_func_or_var(char * buffer, int * pos);
 int is_operation(char ch);
 
 //! @brief Eval ...
-int eval(const tree_node_t * node);
+double eval(const tree_node_t * node);
+
+//! @brief Func to compare two double numbers, use EPS constant in it
+int is_equal(double num1, double num2);
 
 //! @brief Diff ...
 tree_node_t * diff(tree_node_t * node);

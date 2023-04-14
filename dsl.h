@@ -13,8 +13,11 @@
 #define NUM(x) create_num(x)
 #define VAR(x) create_var(x)
 
-#define dL  diff(node->left)
+#define dL diff(node->left)
 #define dR diff(node->right)
 
 #define cL copy_subtree(node->left)
 #define cR copy_subtree(node->right)
+
+#define evalR eval(node->right)
+#define evalL eval(node->left)
