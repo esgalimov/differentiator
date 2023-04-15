@@ -13,7 +13,7 @@ enum print_mode
 };
 
 //! @brief Return bad value in eval
-const int NULL_EVAL = (const int) 0xDEADBEAF;
+const int ERROR = (const int) 0xDEADBEAF;
 
 //! @brief
 const double EPS = 0.000001;
@@ -56,5 +56,20 @@ int is_equal(double num1, double num2);
 
 //! @brief Diff ...
 tree_node_t * diff(tree_node_t * node);
+
+//-------------------------Get part------------------------------
+
+//! @brief String to create first version of recursive descent
+extern const char * str;
+
+//! @brief Position to use in get funcs
+extern int p;
+
+//! @brief Get funcs
+int getG(const char * str);
+int getN(void);
+int getE(void);
+int getT(void);
+int getP(void);
 
 #endif

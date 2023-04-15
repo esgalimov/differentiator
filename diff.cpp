@@ -386,7 +386,7 @@ double eval(const tree_node_t * node)
         default:
             fprintf(log_file, "<pre>Undefind operation</pre>");
             subtree_dump(node);
-            return NULL_EVAL;
+            return NAN;
     }
 }
 
