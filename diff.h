@@ -66,10 +66,11 @@ extern const char * str;
 extern int p;
 
 //! @brief Get funcs
-int getG(const char * str);
-int getN(void);
-int getE(void);
-int getT(void);
-int getP(void);
+double getG(const char * str);
+double getN(void);
+double getE(void);
+double getT(void);
+double getP(void);
+double getD(void);
 
 #endif

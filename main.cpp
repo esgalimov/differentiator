@@ -7,7 +7,7 @@ int main(void)
 {
     open_log_file();
 
-    printf("%d", getG("(2+2)*(7-9)/(0+4)"));
+    printf("%lg", getG("3^"));
 
     close_log_file();
     return 0;
