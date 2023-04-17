@@ -5,7 +5,7 @@
 #include "tree_debug.h"
 
 //! @brief Types of print tree
-enum print_mode
+enum mode
 {
     PRE  = 1,
     IN   = 2,
@@ -19,7 +19,7 @@ const int ERROR = (const int) 0xDEADBEAF;
 const double EPS = 0.000001;
 
 //! @brief ...
-int tree_make_expression(tree_t * tree, print_mode mode, const char * filename);
+int tree_make_expression(tree_t * tree, mode print_mode, const char * filename);
 
 //! @brief Different type of print tree
 //! @param [in] node - ptr to start node
@@ -29,7 +29,7 @@ void tree_print_inorder  (tree_node_t * node, FILE * stream);
 //void tree_print_postorder(tree_node_t * node, FILE * stream);
 
 //! @brief ...
-int tree_read_expression(tree_t * tree, const char * filename);
+int tree_read_expression(tree_t * tree, mode read_mode, const char * filename);
 
 //! @brief ...
 tree_node_t * tree_read_preorder(char * buffer, int * pos);
@@ -66,11 +66,11 @@ extern const char * str;
 extern int p;
 
 //! @brief Get funcs
-double getG(const char * str);
-double getN(void);
-double getE(void);
-double getT(void);
-double getP(void);
-double getD(void);
+tree_node_t * getG(const char * str);
+tree_node_t * getN(void);
+tree_node_t * getE(void);
+tree_node_t * getT(void);
+tree_node_t * getP(void);
+tree_node_t * getD(void);
 
 #endif

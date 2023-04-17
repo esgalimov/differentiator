@@ -6,79 +6,79 @@
 const char * str = NULL;
 int p = 0;
 
-double getG(const char * exp)
+tree_node_t * getG(const char * exp)
 {
     str = exp; p = 0;
 
-    double val = getE();
+    tree_node_t * val = getE();
 
-    if (str[p] != '\0' && !is_equal(val, ERROR))
+    if (str[p] != '$' && val != NULL)
     {
         fprintf(log_file, "Func: getG; ERROR: must be \"\\0\" in the end; pos = %d; ch = %c\n", p, str[p]);
-        return ERROR;
+        return NULL;
     }
     return val;
 }
 
-double getE(void)
+tree_node_t * getE(void)
 {
-    double val = getT();
+    tree_node_t * val = getT();
     while (str[p] == '+'|| str[p] == '-')
     {
         char op = str[p];
         p++;
-        double val2 = getT();
-        if (op == '+') val += val2;
-        else           val -= val2;
+        tree_node_t * val2 = getT();
+        if (op == '+') val = ADD(val, val2);
+        else           val = SUB(val, val2);
     }
     return val;
 }
 
-double getT(void)
+tree_node_t * getT(void)
 {
-    double val = getD();
+    tree_node_t * val = getD();
     while (str[p] == '*'|| str[p] == '/')
     {
         char op = str[p];
         p++;
-        double val2 = getD();
-        if (op == '*') val *= val2;
+        tree_node_t * val2 = getD();
+        if (op == '*') val = MUL(val, val2);
         else
         {
-            if (is_equal(val2, 0))
+            if (is_equal(val2->value, 0))
             {
                 fprintf(log_file, "Func: getT; ERROR: division by zero; pos = %d\n", p);
-                return ERROR;
+                return NULL;
             }
-            val /= val2;
+            val = DIV(val, val2);
         }
     }
     return val;
 }
 
-double getD(void)
+tree_node_t * getD(void)
 {
-    double val = getP();
+    tree_node_t * val = getP();
 
     while (str[p] == '^')
     {
         p++;
-        double val2 = getP();
-        val = pow(val, val2);
+        tree_node_t * val2 = getP();
+        val = POW(val, val2);
     }
     return val;
 }
 
-double getP(void)
+tree_node_t * getP(void)
 {
     if (str[p] == '(')
     {
         p++;
-        double val = getE();
+        tree_node_t * val = getE();
         if (str[p] != ')')
         {
             fprintf(log_file, "Func: getP; ERROR: no \")\", pos = %d, ch = %c/n", p, str[p]);
-            return ERROR;
+            return NULL;
         }
         p++;
         return val;
@@ -86,7 +86,7 @@ double getP(void)
     else return getN();
 }
 
-double getN(void)
+tree_node_t * getN(void)
 {
     double val = 0;
     int saved_p = p, is_neg = 0, d_after_dot = -1;
@@ -110,7 +110,7 @@ double getN(void)
             else
             {
                 fprintf(log_file, "Func: getN; ERROR: second \".\" in number; pos = %d\n", p);
-                return ERROR;
+                return NULL;
             }
         }
         else
@@ -121,7 +121,8 @@ double getN(void)
     if (p == saved_p)
     {
         fprintf(log_file, "Func: getN; ERROR: digit didn't find; pos = %d; ch = %c\n", p, str[p]);
-        return ERROR;
+        return NULL;
     }
-    return (is_neg ? -1 : 1) * val / pow(10, (d_after_dot == -1) ? 0 : d_after_dot);
+    double ret_val = (is_neg ? -1 : 1) * val / pow(10, (d_after_dot == -1) ? 0 : d_after_dot);
+    return NUM(ret_val);
 }

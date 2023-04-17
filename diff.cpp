@@ -4,7 +4,7 @@
 #include "dsl.h"
 
 
-int tree_make_expression(tree_t * tree, print_mode mode, const char * filename)
+int tree_make_expression(tree_t * tree, mode print_mode, const char * filename)
 {
     ASSERT(tree != NULL);
 
@@ -16,7 +16,7 @@ int tree_make_expression(tree_t * tree, print_mode mode, const char * filename)
         return 1;
     }
 
-    switch (mode)
+    switch (print_mode)
     {
         case PRE:
            tree_print_preorder(tree->root, fp);
@@ -136,7 +136,7 @@ void tree_print_postorder(tree_node_t * node, FILE * stream) // пока не т
         }
 }*/
 
-int tree_read_expression(tree_t * tree, const char * filename)
+int tree_read_expression(tree_t * tree, mode read_mode, const char * filename)
 {
     FILE * fp = fopen(filename, "r");
 
@@ -154,8 +154,17 @@ int tree_read_expression(tree_t * tree, const char * filename)
     fread(buffer, sizeof(char), filesize, fp);
     *(buffer + filesize) = '\0';
 
-    int pos = 0;
-    link_root(tree, tree_read_preorder(buffer, &pos));
+    if (read_mode == PRE)
+    {
+        int pos = 0;
+        link_root(tree, tree_read_preorder(buffer, &pos));
+    }
+    else if (read_mode == IN)
+    {
+        link_root(tree, getG(buffer));
+    }
+    else
+        fprintf(log_file, "<pre>%d read mode doesn't exist\n</pre>", read_mode);
 
     free(buffer);
     return 0;

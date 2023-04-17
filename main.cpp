@@ -6,9 +6,14 @@
 int main(void)
 {
     open_log_file();
+    tree_t tree = {};
+    tree_ctor(&tree);
 
-    printf("%lg", getG("3^"));
+    tree_read_expression(&tree, IN, "./read/expr.txt");
+    tree_dump(&tree);
+    printf("%lg", eval(tree.root));
 
+    tree_dtor(&tree);
     close_log_file();
     return 0;
 }
