@@ -1,20 +1,32 @@
 digraph
 {
-    node_info[shape = record, label = "{root = 0x102c00b50}"];
+    node_info[shape = record, label = "{root = 0x107100a50}"];
 
-    node_info->node_0x102c00b50 [color = "#98FB98"];
-    node_0x102c00b50[shape = Mrecord, label = "{{0x102c00b50} | {parent =  0x0} | {OP} | {*} | {0x102c00bd0 | 0x102c00b90}}",
+    node_info->node_0x107100a50 [color = "#98FB98"];
+    node_0x107100a50[shape = Mrecord, label = "{{0x107100a50} | {parent =  0x0} | {OP} | {+} | {0x107100b50 | 0x107100a90}}",
                 style="filled", fillcolor="#FFFDC2"];
-    node_0x102c00bd0[shape = Mrecord, label = "{{0x102c00bd0} | {parent =  0x102c00b50} | {OP} | {+} | {0x102c00c50 | 0x102c00c10}}",
+    node_0x107100b50[shape = Mrecord, label = "{{0x107100b50} | {parent =  0x107100a50} | {FUNC} | {^} | {0x107100bd0 | 0x107100b90}}",
+                style="filled", fillcolor="#E6E6FA"];
+    node_0x107100bd0[shape = Mrecord, label = "{{0x107100bd0} | {parent =  0x107100b50} | {OP} | {+} | {0x107100c50 | 0x107100c10}}",
                 style="filled", fillcolor="#FFFDC2"];
-    node_0x102c00c50[shape = Mrecord, label = "{{0x102c00c50} | {parent =  0x102c00bd0} | {NUM} | {2} | {0x0 | 0x0}}",
+    node_0x107100c50[shape = Mrecord, label = "{{0x107100c50} | {parent =  0x107100bd0} | {NUM} | {2} | {0x0 | 0x0}}",
                 style="filled", fillcolor="#E7F8BC"];
-    node_0x102c00c10[shape = Mrecord, label = "{{0x102c00c10} | {parent =  0x102c00bd0} | {NUM} | {3} | {0x0 | 0x0}}",
+    node_0x107100c10[shape = Mrecord, label = "{{0x107100c10} | {parent =  0x107100bd0} | {NUM} | {3} | {0x0 | 0x0}}",
                 style="filled", fillcolor="#E7F8BC"];
-    node_0x102c00b90[shape = Mrecord, label = "{{0x102c00b90} | {parent =  0x102c00b50} | {NUM} | {9} | {0x0 | 0x0}}",
+    node_0x107100b90[shape = Mrecord, label = "{{0x107100b90} | {parent =  0x107100b50} | {NUM} | {2} | {0x0 | 0x0}}",
                 style="filled", fillcolor="#E7F8BC"];
-    node_0x102c00b50->node_0x102c00bd0 [color = "#98FB98"];
-    node_0x102c00bd0->node_0x102c00c50 [color = "#98FB98"];
-    node_0x102c00bd0->node_0x102c00c10 [color = "#F0E68C"];
-    node_0x102c00b50->node_0x102c00b90 [color = "#F0E68C"];
+    node_0x107100a90[shape = Mrecord, label = "{{0x107100a90} | {parent =  0x107100a50} | {OP} | {/} | {0x107100b10 | 0x107100ad0}}",
+                style="filled", fillcolor="#FFFDC2"];
+    node_0x107100b10[shape = Mrecord, label = "{{0x107100b10} | {parent =  0x107100a90} | {NUM} | {45} | {0x0 | 0x0}}",
+                style="filled", fillcolor="#E7F8BC"];
+    node_0x107100ad0[shape = Mrecord, label = "{{0x107100ad0} | {parent =  0x107100a90} | {NUM} | {4} | {0x0 | 0x0}}",
+                style="filled", fillcolor="#E7F8BC"];
+    node_0x107100a50->node_0x107100b50 [color = "#98FB98"];
+    node_0x107100b50->node_0x107100bd0 [color = "#98FB98"];
+    node_0x107100bd0->node_0x107100c50 [color = "#98FB98"];
+    node_0x107100bd0->node_0x107100c10 [color = "#F0E68C"];
+    node_0x107100b50->node_0x107100b90 [color = "#F0E68C"];
+    node_0x107100a50->node_0x107100a90 [color = "#F0E68C"];
+    node_0x107100a90->node_0x107100b10 [color = "#98FB98"];
+    node_0x107100a90->node_0x107100ad0 [color = "#F0E68C"];
 }

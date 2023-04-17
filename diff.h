@@ -18,6 +18,12 @@ const int ERROR = (const int) 0xDEADBEAF;
 //! @brief
 const double EPS = 0.000001;
 
+typedef struct
+{
+    char * buffer;
+    int    pos;
+} expr_text;
+
 //! @brief ...
 int tree_make_expression(tree_t * tree, mode print_mode, const char * filename);
 
@@ -59,18 +65,12 @@ tree_node_t * diff(tree_node_t * node);
 
 //-------------------------Get part------------------------------
 
-//! @brief String to create first version of recursive descent
-extern const char * str;
-
-//! @brief Position to use in get funcs
-extern int p;
-
 //! @brief Get funcs
-tree_node_t * getG(const char * str);
-tree_node_t * getN(void);
-tree_node_t * getE(void);
-tree_node_t * getT(void);
-tree_node_t * getP(void);
-tree_node_t * getD(void);
+tree_node_t * getG(expr_text * expr);
+tree_node_t * getN(expr_text * expr);
+tree_node_t * getE(expr_text * expr);
+tree_node_t * getT(expr_text * expr);
+tree_node_t * getP(expr_text * expr);
+tree_node_t * getD(expr_text * expr);
 
 #endif

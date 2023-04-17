@@ -146,27 +146,30 @@ int tree_read_expression(tree_t * tree, mode read_mode, const char * filename)
         return 1;
     }
 
+    expr_text * expr = (expr_text *) calloc(1, sizeof(expr_text));
+
     fseek(fp, 0L, SEEK_END);
     size_t filesize = (size_t) ftell(fp);
     rewind(fp);
 
-    char * buffer = (char *) calloc(filesize + 1, sizeof(char));
-    fread(buffer, sizeof(char), filesize, fp);
-    *(buffer + filesize) = '\0';
+    expr->buffer = (char *) calloc(filesize + 1, sizeof(char));
+    fread(expr->buffer, sizeof(char), filesize, fp);
+    *(expr->buffer + filesize) = '\0';
 
     if (read_mode == PRE)
     {
         int pos = 0;
-        link_root(tree, tree_read_preorder(buffer, &pos));
+        link_root(tree, tree_read_preorder(expr->buffer, &pos));
     }
     else if (read_mode == IN)
     {
-        link_root(tree, getG(buffer));
+        link_root(tree, getG(expr));
     }
     else
         fprintf(log_file, "<pre>%d read mode doesn't exist\n</pre>", read_mode);
 
-    free(buffer);
+    free(expr->buffer);
+    free(expr);
     return 0;
 }
 
