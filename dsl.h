@@ -21,3 +21,7 @@
 
 #define evalR eval(node->right)
 #define evalL eval(node->left)
+
+#define CMP_LEFT(x)  ((*node)->left->type  == TYPE_NUM && is_equal((*node)->left->value,  x))
+
+#define CMP_RIGHT(x) ((*node)->right->type == TYPE_NUM && is_equal((*node)->right->value, x))

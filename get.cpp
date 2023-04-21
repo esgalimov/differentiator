@@ -41,7 +41,7 @@ tree_node_t * getT(expr_text * expr)
         if (op == '*') val = MUL(val, val2);
         else
         {
-            if (is_equal(val2->value, 0))
+            if (val2->type == TYPE_NUM && is_equal(val2->value, 0))
             {
                 fprintf(log_file, "<pre>Func: getT; ERROR: division by zero; pos = %d\n</pre>", expr->pos);
                 return NULL;
@@ -108,6 +108,11 @@ tree_node_t * getW(expr_text * expr)
         if (!strcasecmp(name, "exp")) return EXP(func_arg);
     }
 
+    if (strlen(name) > 1)
+    {
+        fprintf(log_file, "<pre>Func: getW; ERROR: var must be one-letter long, pos = %d</pre>\n", expr->pos);
+        return NULL;
+    }
     char var_name = name[0];
     free(name);
 

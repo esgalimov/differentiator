@@ -67,7 +67,7 @@ int is_equal(double num1, double num2);
 //! @brief Diff ...
 tree_node_t * diff(tree_node_t * node);
 
-//-------------------------Get part------------------------------
+//-------------------------Get-part------------------------------
 
 //! @brief Get funcs
 tree_node_t * getG(expr_text * expr);
@@ -80,7 +80,32 @@ tree_node_t * getD(expr_text * expr);
 tree_node_t * getW(expr_text * expr);
 
 //! @brief Func to read name of function or variable
+//! @param [in] expr - ptr to expression struct
+//! @return ptr to name (must be freed after using)
 char * read_name(expr_text * expr);
 
+//-----------------------Simplify-part----------------------------
+
+//! @brief Func what count subtrees without variables
+//! @param [in] node - ptr to start node
+//! @return ptr to simplified subtree
+void tree_eval_simplify(tree_node_t ** node);
+
+//! @brief Func what remove *1, /1, ˆ1, *0, ˆ0, 0ˆ, 1ˆ and count subtrees without variables
+void tree_simplify(tree_node_t ** node);
+
+//! @brief Func what check if there are variables in subtree
+//! @param [in] node - ptr to node
+//! @return 1 - there is(are) var(s), 0 - else
+int have_var(tree_node_t * node);
+
+//! @brief ...
+void right_instead_node(tree_node_t ** node);
+
+//! @brief ...
+void left_instead_node(tree_node_t ** node);
+
+//! @brief ...
+void zero_instead_node(tree_node_t ** node);
 
 #endif

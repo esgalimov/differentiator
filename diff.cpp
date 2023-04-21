@@ -369,7 +369,7 @@ double eval(const tree_node_t * node)
 
             if (is_equal(eval_right, 0))
             {
-                fprintf(log_file, "<pre>Division by zero</pre>");
+                fprintf(log_file, "<pre>ERROR: Division by zero, %p</pre>", node);
                 subtree_dump(node);
                 return NAN;
             }
@@ -444,7 +444,93 @@ int is_equal(double num1, double num2)
     return fabs(num1 - num2) < EPS;
 }
 
-// tree_node_t * tree_simplify(tree_node_t * node, tree_t * tree)
-// {
-//     if ()...
-// }
+void tree_eval_simplify(tree_node_t ** node)
+{
+    if (*node == NULL) return;
+    if (have_var(*node) == 0)
+    {
+        tree_node_t * old_node = *node;
+        *node = NUM(eval(*node));
+        (*node)->parent = old_node->parent;
+        nodes_dtor(old_node);
+        return;
+    }
+    tree_eval_simplify(&((*node)->left));
+    tree_eval_simplify(&((*node)->right));
+}
+
+void tree_simplify(tree_node_t ** node)
+{
+    if (*node == NULL) return;
+
+    tree_eval_simplify(node);
+
+    if ((*node)->type == TYPE_MUL)
+    {
+        if (CMP_LEFT(0) || CMP_RIGHT(0)) zero_instead_node(node);
+        else if (CMP_LEFT(1))           right_instead_node(node);
+        else if (CMP_RIGHT(1))           left_instead_node(node);
+    }
+    else if ((*node)->type == TYPE_ADD || (*node)->type == TYPE_SUB)
+    {
+        if      (CMP_LEFT(0))  right_instead_node(node);
+        else if (CMP_RIGHT(0)) left_instead_node(node);
+    }
+    else if ((*node)->type == TYPE_DIV)
+    {
+        if (CMP_RIGHT(0))
+        {
+            fprintf(log_file, "<pre>ERROR: Division by zero, %p</pre>", node);
+            return;
+        }
+        if (CMP_LEFT(0))        zero_instead_node(node);
+        else if (CMP_RIGHT(1)) right_instead_node(node);
+    }
+    // else if ((*node)->type == TYPE_POW)
+    // {
+    //
+    // }
+    //...
+}
+
+void right_instead_node(tree_node_t ** node)
+{
+    tree_node_t * old_node = *node;
+
+    *node = old_node->right;
+    (*node)->parent = old_node->parent;
+
+    free(old_node->left);
+    free(old_node);
+}
+
+void left_instead_node(tree_node_t ** node)
+{
+    tree_node_t * old_node = *node;
+
+    *node = old_node->left;
+    (*node)->parent = old_node->parent;
+
+    free(old_node->right);
+    free(old_node);
+}
+
+void zero_instead_node(tree_node_t ** node)
+{
+    tree_node_t * old_node = *node;
+
+    *node = NUM(0);
+    nodes_dtor(old_node);
+}
+
+int have_var(tree_node_t * node)
+{
+    if (node == NULL) return 0;
+
+    if (node->type == TYPE_VAR) return 1;
+
+    int var_cnt = have_var(node->left) + have_var(node->right);
+
+    return var_cnt;
+
+}
