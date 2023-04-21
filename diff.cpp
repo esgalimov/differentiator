@@ -71,11 +71,9 @@ void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
     fprintf(stream, ")");
 }
 
-void tree_print_inorder(tree_node_t * node, FILE * stream) //(((5)+(7))*(10))
+void tree_print_inorder(tree_node_t * node, FILE * stream)
 {
     if (node == NULL) return;
-
-    fprintf(stream, "(");
 
     if (node->type != TYPE_LOG)
         tree_print_inorder(node->left, stream);
@@ -103,7 +101,6 @@ void tree_print_inorder(tree_node_t * node, FILE * stream) //(((5)+(7))*(10))
     tree_print_inorder(node->right, stream);
     if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
         fprintf(stream, ")");
-    fprintf(stream, ")");
 }
 
 /*

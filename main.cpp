@@ -11,9 +11,16 @@ int main(void)
 
     tree_read_expression(&tree, IN, "./read/expr.txt");
     tree_dump(&tree);
-    printf("%lg", eval(tree.root));
+    //printf("%lg", eval(tree.root));
+
+    tree_t dtree = {};
+    tree_ctor(&dtree);
+    dtree.root = diff(tree.root);
+    tree_dump(&dtree);
+    tree_make_expression(&dtree, IN, "./prints/tree_print.txt");
 
     tree_dtor(&tree);
+    tree_dtor(&dtree);
     close_log_file();
     return 0;
 }

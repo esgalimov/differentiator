@@ -15,9 +15,13 @@ enum mode
 //! @brief Return bad value in eval
 const int ERROR = (const int) 0xDEADBEAF;
 
-//! @brief
+//! @brief Epsilon to compare double variables
 const double EPS = 0.000001;
 
+//! @brief Max lenght of func or variable name
+const int NAME_MAX_LEN = 32;
+
+//! @brief Struct to read expression
 typedef struct
 {
     char * buffer;
@@ -72,5 +76,11 @@ tree_node_t * getE(expr_text * expr);
 tree_node_t * getT(expr_text * expr);
 tree_node_t * getP(expr_text * expr);
 tree_node_t * getD(expr_text * expr);
+//! @brief Get Func or variable (varibles are only one-letter)
+tree_node_t * getW(expr_text * expr);
+
+//! @brief Func to read name of function or variable
+char * read_name(expr_text * expr);
+
 
 #endif

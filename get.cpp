@@ -80,7 +80,38 @@ tree_node_t * getP(expr_text * expr)
         expr->pos++;
         return val;
     }
-    else return getN(expr);
+    else if ('0' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= '9')
+        return getN(expr);
+    else
+        return getW(expr);
+}
+
+tree_node_t * getW(expr_text * expr)
+{
+    char * name = read_name(expr);
+
+    if (expr->buffer[expr->pos] == '(')
+    {
+        expr->pos++;
+        tree_node_t * func_arg = getE(expr);
+
+        if (expr->buffer[expr->pos] != ')')
+        {
+            fprintf(log_file, "<pre>Func: GetW; ERROR: no \")\", pos = %d, ch = %c</pre>\n",
+                    expr->pos, expr->buffer[expr->pos]);
+            return NULL;
+        }
+        expr->pos++;
+        if (!strcasecmp(name, "sin")) return SIN(func_arg);
+        if (!strcasecmp(name, "cos")) return COS(func_arg);
+        if (!strcasecmp(name, "ln"))  return LN(func_arg);
+        if (!strcasecmp(name, "exp")) return EXP(func_arg);
+    }
+
+    char var_name = name[0];
+    free(name);
+
+    return VAR(var_name);
 }
 
 tree_node_t * getN(expr_text * expr)
@@ -123,4 +154,16 @@ tree_node_t * getN(expr_text * expr)
     }
     double ret_val = (is_neg ? -1 : 1) * val / pow(10, (d_after_dot == -1) ? 0 : d_after_dot);
     return NUM(ret_val);
+}
+
+char * read_name(expr_text * expr)
+{
+    char * name = (char *) calloc(NAME_MAX_LEN, sizeof(char));
+    int i = 0;
+
+    while (('a' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= 'z') ||
+           ('A' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= 'Z'))
+        name[i++] = expr->buffer[expr->pos++];
+
+    return name;
 }
