@@ -54,10 +54,10 @@ void tree_simplify(tree_t * tree, tree_node_t ** node)
     }
     else if ((*node)->type == TYPE_POW)
     {
-        if (CMP_LEFT(0))
+        if (CMP_LEFT(0) || LEFT_BELOW_ZERO)
         {
-            if (CMP_RIGHT(0)) num_instead_node(tree, node, 1);
-            else              num_instead_node(tree, node, 0);
+            fprintf(log_file, "<pre>ERROR: base of power is below or equal zero, %p</pre>", node);
+            return;
         }
         else if (CMP_LEFT(1))   num_instead_node(tree, node, 1);
         else if (CMP_RIGHT(1)) left_instead_node(tree, node);

@@ -115,7 +115,17 @@ double eval(const tree_node_t * node)
         case TYPE_SIN: return sin(evalR);
         case TYPE_COS: return cos(evalR);
         case TYPE_LN:  return log(evalR);
-        case TYPE_POW: return pow(evalL, evalR);
+        case TYPE_POW:
+        {
+            double eval_left = evalL;
+            if (eval_left <= 0)
+            {
+                fprintf(log_file, "<pre>ERROR: base of power is below or equal zero, %p</pre>", node);
+                subtree_dump(node);
+                return NAN;
+            }
+            return pow(eval_left, evalR);
+        }
         case TYPE_LOG:
         {
             double eval_left = evalL;
@@ -142,7 +152,12 @@ tree_node_t * diff(tree_node_t * node)
 
     switch (node->type)
     {
-        case TYPE_NUM: return NUM(0);
+        case TYPE_NUM:
+        {
+            if (!isfinite(NAN))
+                return NUM(NAN);
+            return NUM(0);
+        }
         case TYPE_VAR: return NUM(1);
         case TYPE_ADD: return ADD(dL, dR);
         case TYPE_SUB: return SUB(dL, dR);

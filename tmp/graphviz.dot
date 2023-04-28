@@ -1,8 +1,8 @@
 digraph
 {
-    node_info[shape = record, label = "{root = 0x106600690}"];
+    node_info[shape = record, label = "{root = 0x104d00ad0}"];
 
-    node_info->node_0x106600690 [color = "#98FB98"];
-    node_0x106600690[shape = Mrecord, label = "{{0x106600690} | {parent =  0x0} | {NUM} | {-1} | {0x0 | 0x0}}",
+    node_info->node_0x104d00ad0 [color = "#98FB98"];
+    node_0x104d00ad0[shape = Mrecord, label = "{{0x104d00ad0} | {parent =  0x0} | {NUM} | {nan} | {0x0 | 0x0}}",
                 style="filled", fillcolor="#E7F8BC"];
 }

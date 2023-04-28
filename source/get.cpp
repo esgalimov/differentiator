@@ -80,7 +80,7 @@ tree_node_t * getP(expr_text * expr)
         expr->pos++;
         return val;
     }
-    else if ('0' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= '9')
+    else if (('0' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= '9') || expr->buffer[expr->pos] == '-')
         return getN(expr);
     else
         return getW(expr);

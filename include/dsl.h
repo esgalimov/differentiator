@@ -25,3 +25,7 @@
 #define CMP_LEFT(x)  ((*node)->left->type  == TYPE_NUM && is_equal((*node)->left->value,  x))
 
 #define CMP_RIGHT(x) ((*node)->right->type == TYPE_NUM && is_equal((*node)->right->value, x))
+
+#define RIGHT_BELOW_ZERO ((*node)->right->type == TYPE_NUM && (*node)->right->value < 0)
+#define  LEFT_BELOW_ZERO ((*node)->left->type  == TYPE_NUM && (*node)->left->value  < 0)
+
