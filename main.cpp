@@ -1,7 +1,7 @@
-#include "../include/tree.h"
-#include "../include/tree_debug.h"
-#include "../include/diff.h"
-#include "../include/dsl.h"
+#include "./include/tree.h"
+#include "./include/tree_debug.h"
+#include "./include/diff.h"
+#include "./include/dsl.h"
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
     tree_dump(&dtree);
     tree_simplify(&dtree, &dtree.root);
     tree_dump(&dtree);
-    tree_make_expression(&dtree, IN, "./expr_print.txt");
+    tree_print_expression(&dtree, IN, "./expr_print.txt");
 
     tree_dtor(&dtree);
     tree_dtor(&tree);

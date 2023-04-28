@@ -29,7 +29,7 @@ typedef struct
 } expr_text;
 
 //! @brief ...
-int tree_make_expression(tree_t * tree, mode print_mode, const char * filename);
+int tree_print_expression(tree_t * tree, mode print_mode, const char * filename);
 
 //! @brief Different type of print tree
 //! @param [in] node - ptr to start node

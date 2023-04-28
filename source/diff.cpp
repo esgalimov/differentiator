@@ -4,135 +4,6 @@
 #include "../include/dsl.h"
 
 
-int tree_make_expression(tree_t * tree, mode print_mode, const char * filename)
-{
-    ASSERT(tree != NULL);
-
-    FILE * fp = fopen(filename, "w");
-
-    if (fp == NULL)
-    {
-        fprintf(log_file, "<pre>Can't open file \"%s\" for tree print</pre>\n", filename);
-        return 1;
-    }
-
-    switch (print_mode)
-    {
-        case PRE:
-           tree_print_preorder(tree->root, fp);
-           break;
-        case IN:
-           tree_print_inorder(tree->root, fp);
-           break;
-        case POST:
-           //tree_print_postorder(tree->root, fp);
-           fprintf(fp, "out\nhlt\n");
-           break;
-        default:
-            fprintf(log_file, "<pre>Wrong print mode</pre>\n");
-    }
-
-    fclose(fp);
-    return 0;
-}
-
-void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
-{
-    if (node == NULL) return;
-
-    fprintf(stream, "(");
-
-    if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
-        fprintf(stream, "%c", OPERATIONS[node->type - 1]);
-    else if (node->type == TYPE_NUM)
-        fprintf(stream, "%lg", node->value);
-    else if (node->type == TYPE_VAR)
-        fprintf(stream, "%c", (char) node->value);
-    else
-    {
-        switch (node->type)
-        {
-            case TYPE_SIN: fprintf(stream, "sin("); break;
-            case TYPE_COS: fprintf(stream, "cos("); break;
-            case TYPE_LN:  fprintf(stream, "ln(");  break;
-            case TYPE_POW: fprintf(stream, "^(");   break;
-            case TYPE_LOG: fprintf(stream, "log("); break;
-            case TYPE_EXP: fprintf(stream, "exp("); break;
-
-        }
-    }
-
-    tree_print_preorder(node->left, stream);
-    tree_print_preorder(node->right, stream);
-
-    if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
-        fprintf(stream, ")");
-
-    fprintf(stream, ")");
-}
-
-void tree_print_inorder(tree_node_t * node, FILE * stream)
-{
-    if (node == NULL) return;
-
-    if (node->type != TYPE_LOG)
-        tree_print_inorder(node->left, stream);
-
-    if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
-        fprintf(stream, "%c", OPERATIONS[node->type - 1]);
-    else if (node->type == TYPE_NUM)
-        fprintf(stream, "%lg", node->value);
-    else if (node->type == TYPE_VAR)
-        fprintf(stream, "%c", (char) node->value);
-    else
-    {
-        switch (node->type)
-        {
-            case TYPE_SIN: fprintf(stream, "sin(");     break;
-            case TYPE_COS: fprintf(stream, "cos(");     break;
-            case TYPE_LN:  fprintf(stream, "ln(");      break;
-            case TYPE_POW: fprintf(stream, "^(");       break;
-            case TYPE_LOG: fprintf(stream, "log(");
-                tree_print_inorder(node->left, stream); break;
-            case TYPE_EXP: fprintf(stream, "exp(");     break;
-        }
-    }
-
-    tree_print_inorder(node->right, stream);
-    if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
-        fprintf(stream, ")");
-}
-
-/*
-void tree_print_postorder(tree_node_t * node, FILE * stream) // пока не трогаю
-{
-    if (node == NULL) return;
-
-    tree_print_postorder(node->left, stream);
-    tree_print_postorder(node->right, stream);
-
-    if (node->type == TYPE_NUM)
-        fprintf(stream, "push %lg\n", node->value);
-    else
-        switch (node->type)
-        {
-            case TYPE_ADD:
-                fprintf(stream, "add\n");
-                break;
-            case TYPE_SUB:
-                fprintf(stream, "sub\n");
-                break;
-            case TYPE_MUL:
-                fprintf(stream, "mul\n");
-                break;
-            case TYPE_DIV:
-                fprintf(stream, "div\n");
-                break;
-            default:
-                fprintf(log_file, "<pre>Wrong operation</pre>\n");
-        }
-}*/
-
 int tree_read_expression(tree_t * tree, mode read_mode, const char * filename)
 {
     FILE * fp = fopen(filename, "r");
@@ -170,171 +41,37 @@ int tree_read_expression(tree_t * tree, mode read_mode, const char * filename)
     return 0;
 }
 
-//----------------------------read preorder part------------------------------
-tree_node_t * tree_read_preorder(char * buffer, int * pos)
+int tree_print_expression(tree_t * tree, mode print_mode, const char * filename)
 {
-    char ch = '\0';
-    int cnt = 0;
+    ASSERT(tree != NULL);
 
-    sscanf(buffer + *pos, "%c%n", &ch, &cnt);
-    *pos += cnt;
+    FILE * fp = fopen(filename, "w");
 
-    if (ch == '(')
+    if (fp == NULL)
     {
-        sscanf(buffer + *pos, "%c%n", &ch, &cnt);
-
-        if (is_operation(ch))
-        {
-            *pos += cnt;
-            return get_oper(buffer, pos, ch);
-        }
-        else if (isdigit(ch) || ch == '-')
-            return get_number(buffer, pos);
-
-        else if (isalpha(ch) || ch == '^')
-            return get_func_or_var(buffer, pos);
-
-        else if (ch == '(')
-        {
-            *pos += cnt;
-            return tree_read_preorder(buffer, pos);
-        }
-
-        else
-        {
-            fprintf(log_file, "<pre>Undefind symbol: %c </pre>\n", ch);
-            return NULL;
-        }
+        fprintf(log_file, "<pre>Can't open file \"%s\" for tree print</pre>\n", filename);
+        return 1;
     }
-    else
+
+    switch (print_mode)
     {
-        fprintf(log_file, "<pre>Must start with \"(\" | ch = %c | pos = %d |</pre>\n", ch, *pos);
-        return NULL;
+        case PRE:
+           tree_print_preorder(tree->root, fp);
+           break;
+        case IN:
+           tree_print_inorder(tree->root, fp);
+           break;
+        case POST:
+           //tree_print_postorder(tree->root, fp);
+           fprintf(fp, "out\nhlt\n");
+           break;
+        default:
+            fprintf(log_file, "<pre>Wrong print mode</pre>\n");
     }
+
+    fclose(fp);
+    return 0;
 }
-
-int check_close_bracket(char * buffer, int * pos)
-{
-    int cnt = 0;
-    char ch = '\0';
-
-    sscanf(buffer + *pos, "%c%n", &ch, &cnt);
-
-    if (ch != ')')
-    {
-        fprintf(log_file, "<pre>Must be \")\" after node: pos = %d, ch = %c</pre>\n", *pos, ch);
-        //subtree_dump(node_num);
-        return 0;
-    }
-
-    return cnt;
-}
-
-tree_node_t * get_number(char * buffer, int * pos)
-{
-    elem_t value = 0;
-    int cnt = 0;
-
-    sscanf(buffer + *pos, "%lg%n", &value, &cnt);
-    tree_node_t * node_num = create_num(value);
-    *pos += cnt;
-
-    cnt = check_close_bracket(buffer, pos);
-    if (!cnt)
-        return NULL;
-
-    *pos += cnt;
-    return node_num;
-}
-
-tree_node_t * get_oper(char * buffer, int * pos, char ch)
-{
-    node_type op = TYPE_MUL;
-
-    switch (ch)
-    {
-        case '*':
-            break;
-        case '+':
-            op = TYPE_ADD;
-            break;
-        case '-':
-            op = TYPE_SUB;
-            break;
-        case '/':
-            op = TYPE_DIV;
-            break;
-    }
-
-    tree_node_t * node_ch1 = tree_read_preorder(buffer, pos);
-    tree_node_t * node_ch2 = tree_read_preorder(buffer, pos);
-    tree_node_t * node_op = create_op(op, node_ch1, node_ch2);
-
-    int cnt = check_close_bracket(buffer, pos);
-    if (!cnt)
-        return NULL;
-
-    *pos += cnt;
-
-    return node_op;
-}
-
-tree_node_t * get_func_or_var(char * buffer, int * pos)
-{
-    char cmd[32];
-    int cnt = 0;
-    char ch = '\0';
-
-    sscanf(buffer + *pos, "%[a-z^]%n", cmd, &cnt);
-    *pos += cnt;
-
-    sscanf(buffer + *pos, "%c%n", &ch, &cnt);
-    int is_var = 0;
-    *pos += cnt;
-
-    if (ch != '(')
-    {
-        is_var = 1;
-        *pos -= cnt;
-    }
-
-    tree_node_t * node = NULL;
-
-    if (!strcmp(cmd, "sin"))
-        node = SIN(tree_read_preorder(buffer, pos));
-    else if (!strcmp(cmd, "cos"))
-        node = COS(tree_read_preorder(buffer, pos));
-    else if (!strcmp(cmd, "ln"))
-        node = LN(tree_read_preorder(buffer, pos));
-    else if (!strcmp(cmd, "^"))
-        node = POW(tree_read_preorder(buffer, pos),
-                   tree_read_preorder(buffer, pos));
-    else if (!strcmp(cmd, "log"))
-        node = LOG(tree_read_preorder(buffer, pos),
-                   tree_read_preorder(buffer, pos));
-    else if (!strcmp(cmd, "exp"))
-        node = EXP(tree_read_preorder(buffer, pos));
-    else
-    {
-        node = VAR(cmd[0]);
-        //if (is_var == 0)
-    }
-
-    cnt = check_close_bracket(buffer, pos);
-    if (!cnt)
-        return NULL;
-    *pos += cnt;
-    if (!is_var)
-    {
-        cnt = check_close_bracket(buffer, pos);
-        if (!cnt)
-            return NULL;
-        *pos += cnt;
-    }
-
-    return node;
-}
-//--------------------------------------------------------------------
 
 int is_operation(char ch)
 {
@@ -442,113 +179,4 @@ int is_equal(double num1, double num2)
     ASSERT(isfinite(num2));
 
     return fabs(num1 - num2) < EPS;
-}
-
-void tree_eval_simplify(tree_node_t ** node)
-{
-    if (*node == NULL) return;
-    if (have_var(*node) == 0)
-    {
-        tree_node_t * old_node = *node;
-        *node = NUM(eval(*node));
-        (*node)->parent = old_node->parent;
-        nodes_dtor(old_node);
-        return;
-    }
-    tree_eval_simplify(&((*node)->left));
-    tree_eval_simplify(&((*node)->right));
-}
-
-void tree_simplify(tree_t * tree, tree_node_t ** node)
-{
-    if (*node == NULL) return;
-
-    tree_eval_simplify(node);
-
-    int old_simp = tree->simplify;
-
-    if ((*node)->type == TYPE_MUL)
-    {
-        if (CMP_LEFT(0) || CMP_RIGHT(0)) num_instead_node(tree, node, 0);
-        else if (CMP_LEFT(1))          right_instead_node(tree, node);
-        else if (CMP_RIGHT(1))          left_instead_node(tree, node);
-    }
-    else if ((*node)->type == TYPE_ADD || (*node)->type == TYPE_SUB)
-    {
-        if      (CMP_LEFT(0))  { right_instead_node(tree, node); }
-        else if (CMP_RIGHT(0)) {  left_instead_node(tree, node); }
-    }
-    else if ((*node)->type == TYPE_DIV)
-    {
-        if (CMP_RIGHT(0))
-        {
-            fprintf(log_file, "<pre>ERROR: Division by zero, %p</pre>", node);
-            return;
-        }
-        if      (CMP_LEFT(0))    num_instead_node(tree, node, 0);
-        else if (CMP_RIGHT(1))  left_instead_node(tree, node);
-    }
-    else if ((*node)->type == TYPE_POW)
-    {
-        if (CMP_LEFT(0))
-        {
-            if (CMP_RIGHT(0)) num_instead_node(tree, node, 1);
-            else              num_instead_node(tree, node, 0);
-        }
-        else if (CMP_LEFT(1))   num_instead_node(tree, node, 1);
-        else if (CMP_RIGHT(1)) left_instead_node(tree, node);
-        else if (CMP_RIGHT(0))  num_instead_node(tree, node, 1);
-    }
-
-    tree_simplify(tree, &((*node)->left));
-    tree_simplify(tree, &((*node)->right));
-
-    if (tree->simplify > old_simp)
-        tree_simplify(tree, node);
-}
-
-void right_instead_node(tree_t * tree, tree_node_t ** node)
-{
-    tree_node_t * old_node = *node;
-
-    *node = old_node->right;
-    (*node)->parent = old_node->parent;
-    tree->simplify++;
-
-    free(old_node->left);
-    free(old_node);
-}
-
-void left_instead_node(tree_t * tree, tree_node_t ** node)
-{
-    tree_node_t * old_node = *node;
-
-    *node = old_node->left;
-    (*node)->parent = old_node->parent;
-    tree->simplify++;
-
-    free(old_node->right);
-    free(old_node);
-}
-
-void num_instead_node(tree_t * tree, tree_node_t ** node, elem_t num)
-{
-    tree_node_t * old_node = *node;
-
-    *node = NUM(num);
-    tree->simplify++;
-
-    nodes_dtor(old_node);
-}
-
-int have_var(tree_node_t * node)
-{
-    if (node == NULL) return 0;
-
-    if (node->type == TYPE_VAR) return 1;
-
-    int var_cnt = have_var(node->left) + have_var(node->right);
-
-    return var_cnt;
-
 }
