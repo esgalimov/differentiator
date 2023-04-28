@@ -112,4 +112,7 @@ void left_instead_node(tree_t * tree, tree_node_t ** node);
 //! @brief ...
 void num_instead_node(tree_t * tree, tree_node_t ** node, elem_t num);
 
+//! @brief ...
+void neg_instead_node(tree_t * tree, tree_node_t ** node);
+
 #endif

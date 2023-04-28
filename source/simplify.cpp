@@ -32,10 +32,15 @@ void tree_simplify(tree_t * tree, tree_node_t ** node)
         else if (CMP_LEFT(1))          right_instead_node(tree, node);
         else if (CMP_RIGHT(1))          left_instead_node(tree, node);
     }
-    else if ((*node)->type == TYPE_ADD || (*node)->type == TYPE_SUB)
+    else if ((*node)->type == TYPE_ADD)
     {
-        if      (CMP_LEFT(0))  { right_instead_node(tree, node); }
-        else if (CMP_RIGHT(0)) {  left_instead_node(tree, node); }
+        if      (CMP_LEFT(0))  right_instead_node(tree, node);
+        else if (CMP_RIGHT(0))  left_instead_node(tree, node);
+    }
+    else if ((*node)->type == TYPE_SUB)
+    {
+        if      (CMP_RIGHT(0)) left_instead_node(tree, node);
+        else if (CMP_LEFT(0))   neg_instead_node(tree, node);
     }
     else if ((*node)->type == TYPE_DIV)
     {
@@ -98,6 +103,17 @@ void num_instead_node(tree_t * tree, tree_node_t ** node, elem_t num)
     tree->simplify++;
 
     nodes_dtor(old_node);
+}
+
+void neg_instead_node(tree_t * tree, tree_node_t ** node)
+{
+    tree_node_t * old_node = *node;
+
+    *node = MUL(NUM(-1), old_node->right);
+    tree->simplify++;
+
+    free(old_node->left);
+    free(old_node);
 }
 
 int have_var(tree_node_t * node)
