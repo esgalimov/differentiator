@@ -92,7 +92,11 @@ char * read_name(expr_text * expr);
 void tree_eval_simplify(tree_node_t ** node);
 
 //! @brief Func what remove *1, /1, ˆ1, *0, ˆ0, 0ˆ, 1ˆ and count subtrees without variables
-void tree_simplify(tree_node_t ** node);
+//! @param [in] node - ptr to start node
+//! @param [in] tree - ptr to tree, it used to change 'simplify'
+//! variable to check if tree stop changing and we must stop simplifying
+//! @return ptr to simplified subtree
+void tree_simplify(tree_t * tree, tree_node_t ** node);
 
 //! @brief Func what check if there are variables in subtree
 //! @param [in] node - ptr to node
@@ -100,12 +104,12 @@ void tree_simplify(tree_node_t ** node);
 int have_var(tree_node_t * node);
 
 //! @brief ...
-void right_instead_node(tree_node_t ** node);
+void right_instead_node(tree_t * tree, tree_node_t ** node);
 
 //! @brief ...
-void left_instead_node(tree_node_t ** node);
+void left_instead_node(tree_t * tree, tree_node_t ** node);
 
 //! @brief ...
-void zero_instead_node(tree_node_t ** node);
+void num_instead_node(tree_t * tree, tree_node_t ** node, elem_t num);
 
 #endif

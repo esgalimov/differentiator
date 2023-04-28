@@ -1,15 +1,28 @@
 <html>
 <pre>
-int main() at main.cpp(13):
-Tree 0x16d7ef4a0 (<span style="color: green">OK</span>) "&tree" at int main() at main.cpp(10):
-{root = 0x104b00b10}</pre>
+int main() at ./source/main.cpp(13):
+Tree 0x16d5ff3e0 (<span style="color: green">OK</span>) "&tree" at int main() at ./source/main.cpp(10):
+{root = 0x104d00950}</pre>
 <img src="./images/tree_dump1.png">
 <pre>
-int main() at main.cpp(16):
-Tree 0x16d7ef4a0 (<span style="color: green">OK</span>) "&tree" at int main() at main.cpp(10):
-{root = 0x104b00b90}</pre>
+int main() at ./source/main.cpp(15):
+Tree 0x16d5ff3e0 (<span style="color: green">OK</span>) "&tree" at int main() at ./source/main.cpp(10):
+{root = 0x104d00950}</pre>
 <img src="./images/tree_dump2.png">
 <pre>
-Tree 0x16d7ef4a0 "&tree" at int main() at main.cpp(10): DESTRUCTED
+int main() at ./source/main.cpp(20):
+Tree 0x16d5ff480 (<span style="color: green">OK</span>) "&dtree" at int main() at ./source/main.cpp(18):
+{root = 0x104d00250}</pre>
+<img src="./images/tree_dump3.png">
+<pre>
+int main() at ./source/main.cpp(22):
+Tree 0x16d5ff480 (<span style="color: green">OK</span>) "&dtree" at int main() at ./source/main.cpp(18):
+{root = 0x104d00350}</pre>
+<img src="./images/tree_dump4.png">
+<pre>
+Tree 0x16d5ff480 "&dtree" at int main() at ./source/main.cpp(18): DESTRUCTED
+</pre>
+<pre>
+Tree 0x16d5ff3e0 "&tree" at int main() at ./source/main.cpp(10): DESTRUCTED
 </pre>
 </html>

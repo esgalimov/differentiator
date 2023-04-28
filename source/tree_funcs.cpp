@@ -1,5 +1,5 @@
-#include "tree.h"
-#include "tree_debug.h"
+#include "../include/tree.h"
+#include "../include/tree_debug.h"
 
 int tree_ctor_(tree_t * tree, var_info info)
 {
@@ -8,7 +8,7 @@ int tree_ctor_(tree_t * tree, var_info info)
     tree->root = NULL;
     tree->info = info;
     tree->status = 0;
-    tree->symplify = 0;
+    tree->simplify = 0;
 
     return STATUS_OK;
 }

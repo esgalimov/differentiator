@@ -1,5 +1,5 @@
-#include "tree.h"
-#include "tree_debug.h"
+#include "../include/tree.h"
+#include "../include/tree_debug.h"
 
 FILE * graphviz_file = NULL;
 FILE * log_file = NULL;

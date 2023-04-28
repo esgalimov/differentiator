@@ -73,7 +73,7 @@ typedef struct
     tree_node_t * root;
     int           status;
     var_info      info;
-    int           symplify;
+    int           simplify;
 } tree_t;
 
 //! @brief Tree constructor

@@ -1,7 +1,7 @@
-#include "tree.h"
-#include "tree_debug.h"
-#include "diff.h"
-#include "dsl.h"
+#include "../include/tree.h"
+#include "../include/tree_debug.h"
+#include "../include/diff.h"
+#include "../include/dsl.h"
 
 tree_node_t * getG(expr_text * expr)
 {
