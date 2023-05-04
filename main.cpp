@@ -7,7 +7,7 @@ int main(void)
 {
     open_log_file();
 
-    tree_read_expression("./expr.txt");
+    diff_expression("./expr.txt");
 
     close_log_file();
     return 0;

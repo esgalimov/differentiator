@@ -128,5 +128,10 @@ tree_node_t * copy_subtree(tree_node_t * node)
     else if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
         return create_op((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));
     else
-        return create_func((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));
+    {
+        if (node->type == TYPE_LOG || node->type == TYPE_POW)
+            return create_func((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));
+
+        return create_func((node_type) node->type, copy_subtree(node->right), copy_subtree(node->left));
+    }
 }

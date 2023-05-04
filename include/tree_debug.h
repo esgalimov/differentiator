@@ -3,6 +3,7 @@
 
 #include "tree.h"
 #include "diff.h"
+#include "latex_funcs.h"
 
 #define LOG_MODE
 

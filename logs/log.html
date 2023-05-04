@@ -1,10 +1,23 @@
 <html>
 <pre>
-int tree_read_expression(const char *) at ./source/diff.cpp(16):
-Tree 0x1062014c0 (<span style="color: green">OK</span>) "tree" at expr_t *expr_ctor(const char *) at ./source/expr_toks.cpp(27):
-{root = 0x106500bd0}</pre>
+expr_t *expr_ctor(const char *) at ./source/expr_toks.cpp(33):
+Tree 0x102e014c0 (<span style="color: green">OK</span>) "tree" at expr_t *expr_ctor(const char *) at ./source/expr_toks.cpp(27):
+{root = 0x103100b10}</pre>
 <img src="./images/tree_dump1.png">
 <pre>
-Tree 0x1062014c0 "tree" at expr_t *expr_ctor(const char *) at ./source/expr_toks.cpp(27): DESTRUCTED
+int diff_expression(const char *) at ./source/diff.cpp(23):
+Tree 0x16f1a73e0 (<span style="color: green">OK</span>) "&dtree" at int diff_expression(const char *) at ./source/diff.cpp(19):
+{root = 0x1031005d0}</pre>
+<img src="./images/tree_dump2.png">
+<pre>
+int diff_expression(const char *) at ./source/diff.cpp(25):
+Tree 0x16f1a73e0 (<span style="color: green">OK</span>) "&dtree" at int diff_expression(const char *) at ./source/diff.cpp(19):
+{root = 0x1031005d0}</pre>
+<img src="./images/tree_dump3.png">
+<pre>
+Tree 0x16f1a73e0 "&dtree" at int diff_expression(const char *) at ./source/diff.cpp(19): DESTRUCTED
+</pre>
+<pre>
+Tree 0x102e014c0 "tree" at expr_t *expr_ctor(const char *) at ./source/expr_toks.cpp(27): DESTRUCTED
 </pre>
 </html>

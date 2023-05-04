@@ -3,6 +3,7 @@
 
 #include "tree.h"
 #include "tree_debug.h"
+#include "latex_funcs.h"
 
 //! @brief Types of print tree
 enum mode
@@ -51,7 +52,7 @@ void tree_print_inorder  (tree_node_t * node, FILE * stream);
 //void tree_print_postorder(tree_node_t * node, FILE * stream);
 
 //! @brief ...
-int tree_read_expression(const char * filename);
+int diff_expression(const char * filename);
 
 //! @brief ...
 tree_node_t * tree_read_preorder(char * buffer, int * pos);

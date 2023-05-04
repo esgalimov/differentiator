@@ -4,6 +4,35 @@
 #include "../include/dsl.h"
 
 
+int tree_print_expression(tree_t * tree, mode print_mode, const char * filename)
+{
+    ASSERT(tree != NULL);
+
+    FILE * fp = fopen(filename, "w");
+
+    if (fp == NULL)
+    {
+        fprintf(log_file, "<pre>Can't open file \"%s\" for tree print</pre>\n", filename);
+        return 1;
+    }
+
+    switch (print_mode)
+    {
+        case PRE:
+           tree_print_preorder(tree->root, fp);
+           break;
+        case IN:
+           tree_print_inorder(tree->root, fp);
+           break;
+        case POST:
+        default:
+            fprintf(log_file, "<pre>Wrong print mode</pre>\n");
+    }
+
+    fclose(fp);
+    return 0;
+}
+
 void tree_print_preorder(tree_node_t * node, FILE * stream) //(*(+(5)(7))(10))
 {
     if (node == NULL) return;
@@ -70,33 +99,3 @@ void tree_print_inorder(tree_node_t * node, FILE * stream)
     if (node->type >= TYPE_SIN && node->type <= TYPE_EXP)
         fprintf(stream, ")");
 }
-
-/*
-void tree_print_postorder(tree_node_t * node, FILE * stream) // пока не трогаю
-{
-    if (node == NULL) return;
-
-    tree_print_postorder(node->left, stream);
-    tree_print_postorder(node->right, stream);
-
-    if (node->type == TYPE_NUM)
-        fprintf(stream, "push %lg\n", node->value);
-    else
-        switch (node->type)
-        {
-            case TYPE_ADD:
-                fprintf(stream, "add\n");
-                break;
-            case TYPE_SUB:
-                fprintf(stream, "sub\n");
-                break;
-            case TYPE_MUL:
-                fprintf(stream, "mul\n");
-                break;
-            case TYPE_DIV:
-                fprintf(stream, "div\n");
-                break;
-            default:
-                fprintf(log_file, "<pre>Wrong operation</pre>\n");
-        }
-}*/

@@ -2,48 +2,33 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
+#include "../include/latex_funcs.h"
 
 
-int tree_read_expression(const char* filename)
+int diff_expression(const char* filename)
 {
     expr_t* expr = expr_ctor(filename);
 
     ASSERT(expr);
+    open_latex_file();
 
+    init_latex_file();
+    print_expr_latex(expr->tree->root);
+
+    tree_t dtree = {};
+    tree_ctor(&dtree);
+
+    link_root(&dtree, diff(expr->tree->root));
+    print_expr_latex(dtree.root);
+    tree_dump(&dtree);
+    tree_simplify(&dtree, &dtree.root);
+    tree_dump(&dtree);
+    print_expr_latex(dtree.root);
+
+    tree_dtor(&dtree);
     expr_dtor(expr);
+    create_pdf();
 
-    return 0;
-}
-
-int tree_print_expression(tree_t * tree, mode print_mode, const char * filename)
-{
-    ASSERT(tree != NULL);
-
-    FILE * fp = fopen(filename, "w");
-
-    if (fp == NULL)
-    {
-        fprintf(log_file, "<pre>Can't open file \"%s\" for tree print</pre>\n", filename);
-        return 1;
-    }
-
-    switch (print_mode)
-    {
-        case PRE:
-           tree_print_preorder(tree->root, fp);
-           break;
-        case IN:
-           tree_print_inorder(tree->root, fp);
-           break;
-        case POST:
-           //tree_print_postorder(tree->root, fp);
-           fprintf(fp, "out\nhlt\n");
-           break;
-        default:
-            fprintf(log_file, "<pre>Wrong print mode</pre>\n");
-    }
-
-    fclose(fp);
     return 0;
 }
 
