@@ -1,1 +1,1 @@
-nan
+x^(x)*x/x+ln(x)

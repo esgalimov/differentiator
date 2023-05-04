@@ -1,8 +1,14 @@
 digraph
 {
-    node_info[shape = record, label = "{root = 0x104d00ad0}"];
+    node_info[shape = record, label = "{root = 0x106500bd0}"];
 
-    node_info->node_0x104d00ad0 [color = "#98FB98"];
-    node_0x104d00ad0[shape = Mrecord, label = "{{0x104d00ad0} | {parent =  0x0} | {NUM} | {nan} | {0x0 | 0x0}}",
-                style="filled", fillcolor="#E7F8BC"];
+    node_info->node_0x106500bd0 [color = "#98FB98"];
+    node_0x106500bd0[shape = Mrecord, label = "{{0x106500bd0} | {parent =  0x0} | {FUNC} | {^} | {0x106500c50 | 0x106500c10}}",
+                style="filled", fillcolor="#E6E6FA"];
+    node_0x106500c50[shape = Mrecord, label = "{{0x106500c50} | {parent =  0x106500bd0} | {VAR} | {x} | {0x0 | 0x0}}",
+                style="filled", fillcolor="#AFEEEE"];
+    node_0x106500c10[shape = Mrecord, label = "{{0x106500c10} | {parent =  0x106500bd0} | {VAR} | {x} | {0x0 | 0x0}}",
+                style="filled", fillcolor="#AFEEEE"];
+    node_0x106500bd0->node_0x106500c50 [color = "#98FB98"];
+    node_0x106500bd0->node_0x106500c10 [color = "#F0E68C"];
 }

@@ -4,40 +4,14 @@
 #include "../include/dsl.h"
 
 
-int tree_read_expression(tree_t * tree, mode read_mode, const char * filename)
+int tree_read_expression(const char* filename)
 {
-    FILE * fp = fopen(filename, "r");
+    expr_t* expr = expr_ctor(filename);
 
-    if (fp == NULL)
-    {
-        fprintf(log_file, "<pre>Can't open file \"%s\" for read tree</pre>\n", filename);
-        return 1;
-    }
+    ASSERT(expr);
 
-    expr_text * expr = (expr_text *) calloc(1, sizeof(expr_text));
+    expr_dtor(expr);
 
-    fseek(fp, 0L, SEEK_END);
-    size_t filesize = (size_t) ftell(fp);
-    rewind(fp);
-
-    expr->buffer = (char *) calloc(filesize + 1, sizeof(char));
-    fread(expr->buffer, sizeof(char), filesize, fp);
-    *(expr->buffer + filesize) = '\0';
-
-    if (read_mode == PRE)
-    {
-        int pos = 0;
-        link_root(tree, tree_read_preorder(expr->buffer, &pos));
-    }
-    else if (read_mode == IN)
-    {
-        link_root(tree, getG(expr));
-    }
-    else
-        fprintf(log_file, "<pre>%d read mode doesn't exist\n</pre>", read_mode);
-
-    free(expr->buffer);
-    free(expr);
     return 0;
 }
 
@@ -93,7 +67,11 @@ double eval(const tree_node_t * node)
         return NAN;
     }
     if (node->type == TYPE_NUM)
+    {
+        if (!isfinite(node->value))
+            return NAN;
         return node->value;
+    }
 
     switch (node->type)
     {
@@ -154,7 +132,7 @@ tree_node_t * diff(tree_node_t * node)
     {
         case TYPE_NUM:
         {
-            if (!isfinite(NAN))
+            if (!isfinite(node->value))
                 return NUM(NAN);
             return NUM(0);
         }

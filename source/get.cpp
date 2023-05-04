@@ -3,7 +3,7 @@
 #include "../include/diff.h"
 #include "../include/dsl.h"
 
-tree_node_t * getG(expr_text * expr)
+tree_node_t * getG(expr_t * expr)
 {
     tree_node_t * val = getE(expr);
 
@@ -16,7 +16,7 @@ tree_node_t * getG(expr_text * expr)
     return val;
 }
 
-tree_node_t * getE(expr_text * expr)
+tree_node_t * getE(expr_t * expr)
 {
     tree_node_t * val = getT(expr);
     while (expr->buffer[expr->pos] == '+' || expr->buffer[expr->pos] == '-')
@@ -30,7 +30,7 @@ tree_node_t * getE(expr_text * expr)
     return val;
 }
 
-tree_node_t * getT(expr_text * expr)
+tree_node_t * getT(expr_t * expr)
 {
     tree_node_t * val = getD(expr);
     while (expr->buffer[expr->pos] == '*'|| expr->buffer[expr->pos] == '/')
@@ -52,7 +52,7 @@ tree_node_t * getT(expr_text * expr)
     return val;
 }
 
-tree_node_t * getD(expr_text * expr)
+tree_node_t * getD(expr_t * expr)
 {
     tree_node_t * val = getP(expr);
 
@@ -65,7 +65,7 @@ tree_node_t * getD(expr_text * expr)
     return val;
 }
 
-tree_node_t * getP(expr_text * expr)
+tree_node_t * getP(expr_t * expr)
 {
     if (expr->buffer[expr->pos] == '(')
     {
@@ -86,7 +86,7 @@ tree_node_t * getP(expr_text * expr)
         return getW(expr);
 }
 
-tree_node_t * getW(expr_text * expr)
+tree_node_t * getW(expr_t * expr)
 {
     char * name = read_name(expr);
 
@@ -115,11 +115,14 @@ tree_node_t * getW(expr_text * expr)
     }
     char var_name = name[0];
     free(name);
+    // expr->vars[expr->var_cnt] = (var_t *) calloc(1, sizeof(var_t));
+    // expr->vars[expr->var_cnt]->name = name;
+    // expr->vars[expr->var_cnt]->value = NAN;
 
     return VAR(var_name);
 }
 
-tree_node_t * getN(expr_text * expr)
+tree_node_t * getN(expr_t * expr)
 {
     double val = 0;
     int saved_p = expr->pos;
@@ -161,7 +164,7 @@ tree_node_t * getN(expr_text * expr)
     return NUM(ret_val);
 }
 
-char * read_name(expr_text * expr)
+char * read_name(expr_t * expr)
 {
     char * name = (char *) calloc(NAME_MAX_LEN, sizeof(char));
     int i = 0;
