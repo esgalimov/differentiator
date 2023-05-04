@@ -2,7 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
-
+#include "../include/read_preorder.h"
 
 tree_node_t * tree_read_preorder(char * buffer, int * pos)
 {

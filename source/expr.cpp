@@ -2,6 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
+#include "../include/expr.h"
 
 
 expr_t* expr_ctor(const char* filename)

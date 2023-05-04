@@ -2,6 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
+#include "../include/get.h"
 
 tree_node_t * getG(expr_t * expr)
 {

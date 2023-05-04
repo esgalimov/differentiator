@@ -2,6 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
+#include "../include/simplify.h"
 
 void tree_eval_simplify(tree_node_t ** node)
 {

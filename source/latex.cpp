@@ -2,7 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
-#include "../include/latex_funcs.h"
+#include "../include/latex.h"
 
 FILE* latex_file = NULL;
 

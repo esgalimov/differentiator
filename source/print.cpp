@@ -2,7 +2,7 @@
 #include "../include/tree_debug.h"
 #include "../include/diff.h"
 #include "../include/dsl.h"
-
+#include "../include/print.h"
 
 int tree_print_expression(tree_t * tree, mode print_mode, const char * filename)
 {

@@ -1,9 +1,14 @@
 #ifndef DEBUG_TREE
 #define DEBUG_TREE
 
-#include "tree.h"
 #include "diff.h"
-#include "latex_funcs.h"
+#include "tree.h"
+#include "latex.h"
+#include "get.h"
+#include "read_preorder.h"
+#include "print.h"
+#include "simplify.h"
+#include "expr.h"
 
 #define LOG_MODE
 
