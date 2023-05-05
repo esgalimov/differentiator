@@ -54,29 +54,40 @@ void print_expr_latex(tree_node_t* node, expr_t* expr)
     ASSERT(latex_file);
 
     fprintf(latex_file, "\\begin{center}\n");
-    fprintf(latex_file, "$f( ");
 
-    int i = 0;
+    if (expr->var_cnt > 0)
+    {
+        fprintf(latex_file, "$f( ");
 
-    for (; i < expr->var_cnt - 1; i++)
-        fprintf(latex_file, "%s, ", expr->vars[i]->name);
+        int i = 0;
 
-    fprintf(latex_file, "%s) = ", expr->vars[i]->name);
+        for (; i < expr->var_cnt - 1; i++)
+            fprintf(latex_file, "%s, ", expr->vars[i]->name);
 
-    print_subtree_latex(node, expr);
-    fprintf(latex_file, "$\\\\\n\\end{center}\n");
+        fprintf(latex_file, "%s) = ", expr->vars[i]->name);
 
-    fprintf(latex_file, "\\begin{center}\n");
+        print_subtree_latex(node, expr);
+        fprintf(latex_file, "$\\\\\n\\end{center}\n");
 
-    for (i = 0; i < expr->var_cnt; i++)
-        fprintf(latex_file, "$%s = %lg$\\\\ \n", expr->vars[i]->name, expr->vars[i]->value);
+        fprintf(latex_file, "\\begin{center}\n");
 
-    fprintf(latex_file, "$f( ");
+        for (i = 0; i < expr->var_cnt; i++)
+            fprintf(latex_file, "$%s = %lg$\\\\ \n", expr->vars[i]->name, expr->vars[i]->value);
 
-    for (i = 0; i < expr->var_cnt - 1; i++)
-        fprintf(latex_file, "%lg, ", expr->vars[i]->value);
+        fprintf(latex_file, "$f( ");
 
-    fprintf(latex_file, "%lg) = %lg$", expr->vars[i]->value, eval_var(node, expr));
+        for (i = 0; i < expr->var_cnt - 1; i++)
+            fprintf(latex_file, "%lg, ", expr->vars[i]->value);
+
+        fprintf(latex_file, "%lg) = %lg$", expr->vars[i]->value, eval_var(node, expr));
+    }
+    else
+    {
+        fprintf(latex_file, "$f = ");
+        print_subtree_latex(node, expr);
+        fprintf(latex_file, "= %lg$\\\\", eval(node));
+        fprintf(latex_file, "$\\frac{df}{dx} = 0$");
+    }
 
     fprintf(latex_file, "\n\\end{center}\n");
 

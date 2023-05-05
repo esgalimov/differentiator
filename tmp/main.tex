@@ -10,39 +10,39 @@
 \maketitle
 \section{Function and its derivative}
 \begin{center}
-$f( xui, yw, zr) = xui^{yw^{zr}}$\\
+$f( x, y, z) = (( \cos{ \ln{x^{2}}}+ \sin{\frac{1}{y}})+5^{z})$\\
 \end{center}
 \begin{center}
-$xui = 3$\\ 
-$yw = 4$\\ 
-$zr = 5$\\ 
-$f( 3, 4, 5) = inf$
+$x = 2.5$\\ 
+$y = 4.1$\\ 
+$z = 2.7$\\ 
+$f( 2.5, 4.1, 2.7) = 77.1119$
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial xui} = xui^{yw^{zr}} \cdot (\frac{1 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{0 \cdot zr}{yw}+0 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+$\frac{\partial f}{\partial x} = ((-1 \cdot  \sin{ \ln{x^{2}}} \cdot \frac{2 \cdot x^{1} \cdot 1}{x^{2}}+ \cos{\frac{1}{y}} \cdot \frac{(0 \cdot y-1 \cdot 0)}{y \cdot y})+5^{z} \cdot  \ln{5} \cdot 0)$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial xui} = xui^{yw^{zr}} \cdot \frac{yw^{zr}}{xui}$\\
+$\frac{\partial f}{\partial x} = -1 \cdot  \sin{ \ln{x^{2}}} \cdot \frac{2 \cdot x}{x^{2}}$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial xui}(3, 4, 5) = inf$\\
+$\frac{\partial f}{\partial x}(2.5, 4.1, 2.7) = -0.772744$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial yw} = xui^{yw^{zr}} \cdot (\frac{0 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{1 \cdot zr}{yw}+0 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+$\frac{\partial f}{\partial y} = ((-1 \cdot  \sin{ \ln{x^{2}}} \cdot \frac{2 \cdot x^{1} \cdot 0}{x^{2}}+ \cos{\frac{1}{y}} \cdot \frac{(0 \cdot y-1 \cdot 1)}{y \cdot y})+5^{z} \cdot  \ln{5} \cdot 0)$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial yw} = xui^{yw^{zr}} \cdot yw^{zr} \cdot \frac{zr}{yw} \cdot  \ln{xui}$\\
+$\frac{\partial f}{\partial y} =  \cos{\frac{1}{y}} \cdot \frac{-1}{y \cdot y}$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial yw}(3, 4, 5) = inf$\\
+$\frac{\partial f}{\partial y}(2.5, 4.1, 2.7) = -0.0577277$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial zr} = xui^{yw^{zr}} \cdot (\frac{0 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{0 \cdot zr}{yw}+1 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+$\frac{\partial f}{\partial z} = ((-1 \cdot  \sin{ \ln{x^{2}}} \cdot \frac{2 \cdot x^{1} \cdot 0}{x^{2}}+ \cos{\frac{1}{y}} \cdot \frac{(0 \cdot y-1 \cdot 0)}{y \cdot y})+5^{z} \cdot  \ln{5} \cdot 1)$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial zr} = xui^{yw^{zr}} \cdot yw^{zr} \cdot  \ln{yw} \cdot  \ln{xui}$\\
+$\frac{\partial f}{\partial z} = 5^{z} \cdot 1.60944$\\
 \end{center}
 \begin{center}
-$\frac{\partial f}{\partial zr}(3, 4, 5) = inf$\\
+$\frac{\partial f}{\partial z}(2.5, 4.1, 2.7) = 124.135$\\
 \end{center}
 \end{document}
