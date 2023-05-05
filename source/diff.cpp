@@ -13,21 +13,30 @@ int diff_expression(const char* filename)
     open_latex_file();
 
     init_latex_file();
+    get_var_values(expr);
     print_expr_latex(expr->tree->root, expr);
 
     tree_t dtree = {};
     tree_ctor(&dtree);
 
-    link_root(&dtree, diff(expr->tree->root, 1));
-    print_expr_latex(dtree.root, expr);
-    tree_dump(&dtree, expr);
-    tree_simplify(&dtree, &dtree.root);
-    tree_dump(&dtree, expr);
-    print_expr_latex(dtree.root, expr);
+    for (int var_id = 0; var_id < expr->var_cnt; var_id++)
+    {
+        link_root(&dtree, diff(expr->tree->root, var_id));
 
-    get_var_values(expr);
+        print_diff_latex(dtree.root, expr, var_id);
 
-    printf("dtree = %lg", eval_var(dtree.root, expr));
+        tree_dump(&dtree, expr);
+        tree_simplify(&dtree, &dtree.root);
+        tree_dump(&dtree, expr);
+
+        print_diff_latex(dtree.root, expr, var_id);
+        print_diff_number_latex(dtree.root, expr, var_id);
+
+        nodes_dtor(dtree.root);
+        dtree.root = NULL;
+    }
+
+    //printf("dtree = %lg", eval_var(dtree.root, expr));
 
     tree_dtor(&dtree);
     expr_dtor(expr);
@@ -66,20 +75,20 @@ double eval(const tree_node_t * node)
         fprintf(log_file, "<pre>Try to eval NULL node</pre>");
         return NAN;
     }
-    if (node->type == TYPE_VAR)
-    {
-        fprintf(log_file, "<pre>Try to eval TYPE_VAR node</pre>");
-        return NAN;
-    }
-    if (node->type == TYPE_NUM)
-    {
-        if (!isfinite(node->value))
-            return NAN;
-        return node->value;
-    }
 
     switch (node->type)
     {
+        case TYPE_NUM:
+        {
+            if (!isfinite(node->value))
+                return NAN;
+            return node->value;
+        }
+        case TYPE_VAR:
+        {
+            fprintf(log_file, "<pre>Try to eval TYPE_VAR node</pre>");
+            return NAN;
+        }
         case TYPE_ADD: return evalL + evalR;
         case TYPE_SUB: return evalL - evalR;
         case TYPE_MUL: return evalL * evalR;
@@ -136,19 +145,16 @@ double eval_var(const tree_node_t* node, expr_t* expr)
         fprintf(log_file, "<pre>Try to eval NULL node</pre>");
         return NAN;
     }
-    if (node->type == TYPE_VAR)
-    {
-        return expr->vars[(int) node->value]->value;
-    }
-    if (node->type == TYPE_NUM)
-    {
-        if (!isfinite(node->value))
-            return NAN;
-        return node->value;
-    }
 
     switch (node->type)
     {
+        case TYPE_NUM:
+        {
+            if (!isfinite(node->value))
+                return NAN;
+            return node->value;
+        }
+        case TYPE_VAR: return expr->vars[(int) node->value]->value;
         case TYPE_ADD: return eval_varL + eval_varR;
         case TYPE_SUB: return eval_varL - eval_varR;
         case TYPE_MUL: return eval_varL * eval_varR;
@@ -162,7 +168,7 @@ double eval_var(const tree_node_t* node, expr_t* expr)
                 subtree_dump(node);
                 return NAN;
             }
-            return eval(node->left) / eval_right;
+            return eval_var(node->left, expr) / eval_right;
         }
         case TYPE_SIN: return sin(eval_varR);
         case TYPE_COS: return cos(eval_varR);

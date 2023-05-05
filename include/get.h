@@ -9,6 +9,9 @@
 #include "simplify.h"
 #include "expr.h"
 
+
+const int NO_VAR = -1;
+
 //! @brief Get funcs
 tree_node_t * getG(expr_t* expr);
 tree_node_t * getN(expr_t* expr);
@@ -23,5 +26,8 @@ tree_node_t * getW(expr_t* expr);
 //! @param [in] expr - ptr to expression struct
 //! @return ptr to name (must be freed after using)
 char * read_name(expr_t* expr);
+
+//! @brief Find var by its name
+int find_var(expr_t* expr, const char* name);
 
 #endif

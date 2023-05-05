@@ -23,7 +23,7 @@
     #define tree_dump(tree, expr) tree_dump_((tree), (expr), __PRETTY_FUNCTION__, __FILE__, __LINE__)
 #else
     #define ASSERT(condition)
-    #define tree_dump(tree)
+    #define tree_dump(tree, expr)
 #endif
 
 #define BLUE       "#87CEEB"

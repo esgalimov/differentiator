@@ -109,7 +109,11 @@ tree_node_t * getW(expr_t * expr)
         if (!strcasecmp(name, "exp")) return EXP(func_arg);
     }
 
-    if (expr->var_cnt <= VARS_MAX_CNT - 1)
+    int var_id = find_var(expr, name);
+
+    if (var_id != NO_VAR) return VAR(var_id);
+
+    else if (expr->var_cnt <= VARS_MAX_CNT - 1)
     {
         expr->vars[expr->var_cnt] = (var_t*) calloc(1, sizeof(var_t));
         expr->vars[expr->var_cnt]->value = NAN;
@@ -176,4 +180,14 @@ char * read_name(expr_t * expr)
         name[i++] = expr->buffer[expr->pos++];
 
     return name;
+}
+
+int find_var(expr_t* expr, const char* name)
+{
+    for (int i = 0; i < expr->var_cnt; i++)
+    {
+        if (!strcmp(expr->vars[i]->name, name))
+            return i;
+    }
+    return NO_VAR;
 }

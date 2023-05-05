@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[english]{babel}
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-\DeclareMathSizes{10}{10}{10}{10}
+\DeclareMathSizes{10}{20}{18}{16}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
@@ -10,12 +10,39 @@
 \maketitle
 \section{Function and its derivative}
 \begin{center}
-$( \sin{y}+ \cos{x})$\\
+$f( xui, yw, zr) = xui^{yw^{zr}}$\\
 \end{center}
 \begin{center}
-$( \cos{y} \cdot 0+-1 \cdot  \sin{x} \cdot 1)$\\
+$xui = 3$\\ 
+$yw = 4$\\ 
+$zr = 5$\\ 
+$f( 3, 4, 5) = inf$
 \end{center}
 \begin{center}
-$-1 \cdot  \sin{x}$\\
+$\frac{\partial f}{\partial xui} = xui^{yw^{zr}} \cdot (\frac{1 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{0 \cdot zr}{yw}+0 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial xui} = xui^{yw^{zr}} \cdot \frac{yw^{zr}}{xui}$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial xui}(3, 4, 5) = inf$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial yw} = xui^{yw^{zr}} \cdot (\frac{0 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{1 \cdot zr}{yw}+0 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial yw} = xui^{yw^{zr}} \cdot yw^{zr} \cdot \frac{zr}{yw} \cdot  \ln{xui}$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial yw}(3, 4, 5) = inf$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial zr} = xui^{yw^{zr}} \cdot (\frac{0 \cdot yw^{zr}}{xui}+yw^{zr} \cdot (\frac{0 \cdot zr}{yw}+1 \cdot  \ln{yw}) \cdot  \ln{xui})$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial zr} = xui^{yw^{zr}} \cdot yw^{zr} \cdot  \ln{yw} \cdot  \ln{xui}$\\
+\end{center}
+\begin{center}
+$\frac{\partial f}{\partial zr}(3, 4, 5) = inf$\\
 \end{center}
 \end{document}
