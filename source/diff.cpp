@@ -18,16 +18,36 @@ int diff_expression(const char* filename)
     tree_t dtree = {};
     tree_ctor(&dtree);
 
-    link_root(&dtree, diff(expr->tree->root));
+    link_root(&dtree, diff(expr->tree->root, 1));
     print_expr_latex(dtree.root, expr);
     tree_dump(&dtree, expr);
     tree_simplify(&dtree, &dtree.root);
     tree_dump(&dtree, expr);
     print_expr_latex(dtree.root, expr);
 
+    get_var_values(expr);
+
+    printf("dtree = %lg", eval_var(dtree.root, expr));
+
     tree_dtor(&dtree);
     expr_dtor(expr);
     create_pdf();
+
+    return 0;
+}
+
+int get_var_values(expr_t* expr)
+{
+    for (int i = 0; i < expr->var_cnt; i++)
+    {
+        printf("Enter variable \"%s\": \n", expr->vars[i]->name);
+
+        while (scanf("%lg", &expr->vars[i]->value) != 1)
+        {
+            printf("Incorrect input, try again: \n");
+            while (getchar() != '\n') continue;
+        }
+    }
 
     return 0;
 }
@@ -109,7 +129,76 @@ double eval(const tree_node_t * node)
     }
 }
 
-tree_node_t * diff(tree_node_t * node)
+double eval_var(const tree_node_t* node, expr_t* expr)
+{
+    if (node == NULL)
+    {
+        fprintf(log_file, "<pre>Try to eval NULL node</pre>");
+        return NAN;
+    }
+    if (node->type == TYPE_VAR)
+    {
+        return expr->vars[(int) node->value]->value;
+    }
+    if (node->type == TYPE_NUM)
+    {
+        if (!isfinite(node->value))
+            return NAN;
+        return node->value;
+    }
+
+    switch (node->type)
+    {
+        case TYPE_ADD: return eval_varL + eval_varR;
+        case TYPE_SUB: return eval_varL - eval_varR;
+        case TYPE_MUL: return eval_varL * eval_varR;
+        case TYPE_DIV:
+        {
+            double eval_right = eval_varR;
+
+            if (is_equal(eval_right, 0))
+            {
+                fprintf(log_file, "<pre>ERROR: Division by zero, %p</pre>", node);
+                subtree_dump(node);
+                return NAN;
+            }
+            return eval(node->left) / eval_right;
+        }
+        case TYPE_SIN: return sin(eval_varR);
+        case TYPE_COS: return cos(eval_varR);
+        case TYPE_LN:  return log(eval_varR);
+        case TYPE_POW:
+        {
+            double eval_left = eval_varL;
+            if (eval_left <= 0)
+            {
+                fprintf(log_file, "<pre>ERROR: base of power is below or equal zero, %p</pre>", node);
+                subtree_dump(node);
+                return NAN;
+            }
+            return pow(eval_left, eval_varR);
+        }
+        case TYPE_LOG:
+        {
+            double eval_left = eval_varL;
+
+            if (is_equal(eval_left, 1))
+            {
+                fprintf(log_file, "<pre>Log base is 1</pre>");
+                subtree_dump(node);
+                return NAN;
+            }
+            return log(eval_varL) / log(eval_varR);
+        }
+        case TYPE_EXP: return exp(eval_varR);
+        default:
+            fprintf(log_file, "<pre>Undefind operation</pre>");
+            subtree_dump(node);
+            return NAN;
+    }
+}
+
+tree_node_t* diff(tree_node_t* node, int id)
 {
     if (node == NULL) return NULL;
 
@@ -121,7 +210,12 @@ tree_node_t * diff(tree_node_t * node)
                 return NUM(NAN);
             return NUM(0);
         }
-        case TYPE_VAR: return NUM(1);
+        case TYPE_VAR:
+        {
+            if ((int) node->value == id)
+                return NUM(1);
+            return NUM(0);
+        }
         case TYPE_ADD: return ADD(dL, dR);
         case TYPE_SUB: return SUB(dL, dR);
         case TYPE_MUL: return ADD(MUL(dL, cR), MUL(cL, dR));

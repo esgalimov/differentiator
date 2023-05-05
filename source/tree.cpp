@@ -123,7 +123,7 @@ tree_node_t * copy_subtree(tree_node_t * node)
 
     if (node->type == TYPE_NUM) return create_num(node->value);
 
-    else if (node->type == TYPE_VAR) return create_var((char) node->value);
+    else if (node->type == TYPE_VAR) return create_var((int) node->value);
 
     else if (node->type >= TYPE_ADD && node->type <= TYPE_DIV)
         return create_op((node_type) node->type, copy_subtree(node->left), copy_subtree(node->right));

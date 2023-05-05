@@ -109,11 +109,19 @@ tree_node_t * getW(expr_t * expr)
         if (!strcasecmp(name, "exp")) return EXP(func_arg);
     }
 
-    expr->vars[expr->var_cnt] = (var_t*) calloc(1, sizeof(var_t));
-    expr->vars[expr->var_cnt]->value = NAN;
-    expr->vars[expr->var_cnt]->name = name;
+    if (expr->var_cnt <= VARS_MAX_CNT - 1)
+    {
+        expr->vars[expr->var_cnt] = (var_t*) calloc(1, sizeof(var_t));
+        expr->vars[expr->var_cnt]->value = NAN;
+        expr->vars[expr->var_cnt]->name = name;
 
-    return VAR(expr->var_cnt++);
+        return VAR(expr->var_cnt++);
+    }
+    else
+    {
+        fprintf(log_file, "<pre>Variables number is max - %d</pre>\n", VARS_MAX_CNT);
+        return NULL;
+    }
 }
 
 tree_node_t * getN(expr_t * expr)

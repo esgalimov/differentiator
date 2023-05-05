@@ -1,1 +1,1 @@
-sin(cock)+x$
+sin(y)+cos(x)$

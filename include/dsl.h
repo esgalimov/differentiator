@@ -13,14 +13,17 @@
 #define NUM(x) create_num(x)
 #define VAR(x) create_var(x)
 
-#define dL diff(node->left)
-#define dR diff(node->right)
+#define dL diff(node->left, id)
+#define dR diff(node->right, id)
 
 #define cL copy_subtree(node->left)
 #define cR copy_subtree(node->right)
 
 #define evalR eval(node->right)
 #define evalL eval(node->left)
+
+#define eval_varR eval_var(node->right, expr)
+#define eval_varL eval_var(node->left,  expr)
 
 #define CMP_LEFT(x)  ((*node)->left->type  == TYPE_NUM && is_equal((*node)->left->value,  x))
 
