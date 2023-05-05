@@ -105,7 +105,7 @@ tree_node_t * create_node(node_type type, elem_t value, tree_node_t * left = NUL
 //! @brief Create diffenrent types of nodes, this funcs use create_node func
 tree_node_t * create_num(elem_t value);
 tree_node_t * create_op(node_type oper, tree_node_t * left = NULL, tree_node_t * right = NULL);
-tree_node_t * create_var(char value);
+tree_node_t * create_var(int value);
 tree_node_t * create_func(node_type func, tree_node_t * left = NULL, tree_node_t * right = NULL);
 
 

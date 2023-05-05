@@ -13,17 +13,17 @@ int diff_expression(const char* filename)
     open_latex_file();
 
     init_latex_file();
-    print_expr_latex(expr->tree->root);
+    print_expr_latex(expr->tree->root, expr);
 
     tree_t dtree = {};
     tree_ctor(&dtree);
 
     link_root(&dtree, diff(expr->tree->root));
-    print_expr_latex(dtree.root);
-    tree_dump(&dtree);
+    print_expr_latex(dtree.root, expr);
+    tree_dump(&dtree, expr);
     tree_simplify(&dtree, &dtree.root);
-    tree_dump(&dtree);
-    print_expr_latex(dtree.root);
+    tree_dump(&dtree, expr);
+    print_expr_latex(dtree.root, expr);
 
     tree_dtor(&dtree);
     expr_dtor(expr);

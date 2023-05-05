@@ -89,7 +89,7 @@ tree_node_t * create_op(node_type oper, tree_node_t * left, tree_node_t * right)
     return create_node(oper, NAN, left, right);
 }
 
-tree_node_t * create_var(char value)
+tree_node_t * create_var(int value)
 {
     return create_node(TYPE_VAR, (elem_t) value);
 }

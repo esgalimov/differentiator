@@ -20,10 +20,10 @@
                     #condition, __LINE__, __PRETTY_FUNCTION__, __FILE__);                   \
             abort();                                                                        \
         }
-    #define tree_dump(list) tree_dump_((list), __PRETTY_FUNCTION__, __FILE__, __LINE__)
+    #define tree_dump(tree, expr) tree_dump_((tree), (expr), __PRETTY_FUNCTION__, __FILE__, __LINE__)
 #else
     #define ASSERT(condition)
-    #define tree_dump(list)
+    #define tree_dump(tree)
 #endif
 
 #define BLUE       "#87CEEB"
@@ -87,15 +87,15 @@ int close_log_file(void);
 
 //! @brief Graphiz file init
 //! @param [in] list - ptr to tree's struct
-int graphviz_init(tree_t * tree);
+int graphviz_init(tree_t* tree);
 
 //! @brief Add nodes into .dot file to use graphiz
 //! @param [in] node - ptr to node
-void add_nodes(const tree_node_t * node);
+void add_nodes(const tree_node_t* node, expr_t* expr);
 
 //! @brief Link nodes in .dot file
 //! @param [in] node - ptr to node
-void link_nodes_gr(const tree_node_t * node);
+void link_nodes_gr(const tree_node_t* node);
 
 //! @brief Tree dump
 //! Make .dot file using funcs above and use graphiz to make png picture of dump
@@ -104,13 +104,13 @@ void link_nodes_gr(const tree_node_t * node);
 //! @param [in] file - ptr to file name
 //! @param [in] line - line where was dump
 //! @return 0
-int tree_dump_(tree_t * tree, const char * func, const char * file, int line);
+int tree_dump_(tree_t* tree, expr_t* expr, const char* func, const char* file, int line);
 
 //! @brief Verify tree, create number
 //! Summarize codes of mistakes to make number where each bit is concrete mistake
 //! @param [in] list - ptr to tree
 //! @return error number
-int tree_verify(tree_t * tree);
+int tree_verify(tree_t* tree);
 
 //! @brief Verify node
 //! @param [in] node - ptr to node
@@ -122,7 +122,7 @@ void node_verify(tree_t * tree, const tree_node_t * node);
 void error_number_translate(tree_t * tree);
 
 //! @brief Dump subtree (part of tree from particular node)
-int subtree_dump(const tree_node_t * node);
+int subtree_dump(const tree_node_t* node);
 
 // //! @brief Check access to pointer
 // //! use fwrite to try write one byte from pointer

@@ -31,7 +31,7 @@ expr_t* expr_ctor(const char* filename)
 
     link_root(expr->tree, getG(expr));
 
-    tree_dump(expr->tree);
+    tree_dump(expr->tree, expr);
 
     return expr;
 }

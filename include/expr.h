@@ -18,7 +18,6 @@ const int VARS_MAX_CNT = 32;
 typedef struct
 {
     char * name;
-    int    type;
     elem_t value;
 } var_t;
 

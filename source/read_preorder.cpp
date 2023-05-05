@@ -56,7 +56,6 @@ int check_close_bracket(char * buffer, int * pos)
     if (ch != ')')
     {
         fprintf(log_file, "<pre>Must be \")\" after node: pos = %d, ch = %c</pre>\n", *pos, ch);
-        //subtree_dump(node_num);
         return 0;
     }
 

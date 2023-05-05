@@ -109,18 +109,11 @@ tree_node_t * getW(expr_t * expr)
         if (!strcasecmp(name, "exp")) return EXP(func_arg);
     }
 
-    if (strlen(name) > 1)
-    {
-        fprintf(log_file, "<pre>Func: getW; ERROR: var must be one-letter long, pos = %d</pre>\n", expr->pos);
-        return NULL;
-    }
-    char var_name = name[0];
-    free(name);
-    // expr->vars[expr->var_cnt] = (var_t *) calloc(1, sizeof(var_t));
-    // expr->vars[expr->var_cnt]->name = name;
-    // expr->vars[expr->var_cnt]->value = NAN;
+    expr->vars[expr->var_cnt] = (var_t*) calloc(1, sizeof(var_t));
+    expr->vars[expr->var_cnt]->value = NAN;
+    expr->vars[expr->var_cnt]->name = name;
 
-    return VAR(var_name);
+    return VAR(expr->var_cnt++);
 }
 
 tree_node_t * getN(expr_t * expr)

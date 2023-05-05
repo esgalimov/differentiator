@@ -49,16 +49,16 @@ int init_latex_file(void)
     return 0;
 }
 
-void print_expr_latex(tree_node_t* node)
+void print_expr_latex(tree_node_t* node, expr_t* expr)
 {
     ASSERT(latex_file);
 
     fprintf(latex_file, "\\begin{center}\n$");
-    print_subtree_latex(node);
+    print_subtree_latex(node, expr);
     fprintf(latex_file, "$\\\\\n\\end{center}\n");
 }
 
-void print_subtree_latex(tree_node_t* node)
+void print_subtree_latex(tree_node_t* node, expr_t* expr)
 {
     if (node == NULL) return;
 
@@ -67,26 +67,26 @@ void print_subtree_latex(tree_node_t* node)
     else if (node->type == TYPE_DIV)
         fprintf(latex_file, "\\frac{");
 
-    print_subtree_latex(node->left);
+    print_subtree_latex(node->left, expr);
 
     if (node->type == TYPE_DIV)
         fprintf(latex_file, "}{");
 
     switch (node->type)
     {
-        case TYPE_NUM: fprintf(latex_file, "%lg", node->value);       break;
-        case TYPE_VAR: fprintf(latex_file, "%c", (char) node->value); break;
-        case TYPE_ADD: fprintf(latex_file, "+");                      break;
-        case TYPE_SUB: fprintf(latex_file, "-");                      break;
-        case TYPE_MUL: fprintf(latex_file, " \\cdot ");               break;
-        case TYPE_SIN: fprintf(latex_file, " \\sin{");                break;
-        case TYPE_COS: fprintf(latex_file, " \\cos{");                break;
-        case TYPE_LN:  fprintf(latex_file, " \\ln{");                 break;
-        case TYPE_POW: fprintf(latex_file, "^{");                     break;
-        case TYPE_EXP: fprintf(latex_file, " \\exp{");                break;
+        case TYPE_NUM: fprintf(latex_file, "%lg", node->value);                        break;
+        case TYPE_VAR: fprintf(latex_file, "%s", expr->vars[(int) node->value]->name); break;
+        case TYPE_ADD: fprintf(latex_file, "+");                                       break;
+        case TYPE_SUB: fprintf(latex_file, "-");                                       break;
+        case TYPE_MUL: fprintf(latex_file, " \\cdot ");                                break;
+        case TYPE_SIN: fprintf(latex_file, " \\sin{");                                 break;
+        case TYPE_COS: fprintf(latex_file, " \\cos{");                                 break;
+        case TYPE_LN:  fprintf(latex_file, " \\ln{");                                  break;
+        case TYPE_POW: fprintf(latex_file, "^{");                                      break;
+        case TYPE_EXP: fprintf(latex_file, " \\exp{");                                 break;
     }
 
-    print_subtree_latex(node->right);
+    print_subtree_latex(node->right, expr);
     if ((node->type >= TYPE_SIN && node->type <= TYPE_EXP) || node->type == TYPE_DIV)
         fprintf(latex_file, "}");
     if (node->type == TYPE_ADD || node->type == TYPE_SUB)
