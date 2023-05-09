@@ -13,7 +13,7 @@ enum mode
     POST = 3,
 };
 
-//! @brief ...
+//! @brief Open file to print and print tree with using next functions
 int tree_print_expression(tree_t* tree, mode print_mode, const char * filename);
 
 //! @brief Different type of print tree

@@ -10,7 +10,6 @@
 #include "print.h"
 #include "simplify.h"
 
-//! @brief Max lenght of func or variable name
 const int NAME_MAX_LEN = 32;
 const int VARS_MAX_CNT = 32;
 
@@ -31,13 +30,13 @@ typedef struct
     tree_t*  tree;
 } expr_t;
 
-//! @brief...
+//! @brief Constructor of expr
 expr_t* expr_ctor(const char* filename);
 
-//! @brief...
+//! @brief Func to read file to buffer, return ptr to buffer
 char* read_buffer(FILE* stream);
 
-//! brief...
+//! @brief Destructor of expr
 int expr_dtor(expr_t* expr);
 
 #endif
