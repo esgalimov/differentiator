@@ -176,7 +176,7 @@ char * read_name(expr_t * expr)
     int i = 0;
 
     while (('a' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= 'z') ||
-           ('A' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= 'Z'))
+           ('A' <= expr->buffer[expr->pos] && expr->buffer[expr->pos] <= 'Z') && i < NAME_MAX_LEN)
         name[i++] = expr->buffer[expr->pos++];
 
     return name;
