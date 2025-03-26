@@ -59,6 +59,7 @@ int expr_dtor(expr_t* expr)
 
     for (int i = 0; i < expr->var_cnt; i++)
     {
+        printf("COCK\n");
         free(expr->vars[i]->name);
         free(expr->vars[i]);
     }
@@ -68,6 +69,9 @@ int expr_dtor(expr_t* expr)
     free(expr->vars);
 
     tree_dtor(expr->tree);
+
+    free(expr->tree);
+    free(expr);
 
     return STATUS_OK;
 }

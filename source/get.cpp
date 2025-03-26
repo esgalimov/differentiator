@@ -103,10 +103,15 @@ tree_node_t * getW(expr_t * expr)
             return NULL;
         }
         expr->pos++;
-        if (!strcasecmp(name, "sin")) return SIN(func_arg);
-        if (!strcasecmp(name, "cos")) return COS(func_arg);
-        if (!strcasecmp(name, "ln"))  return LN(func_arg);
-        if (!strcasecmp(name, "exp")) return EXP(func_arg);
+        tree_node_t* node = nullptr;
+
+        if (!strcasecmp(name, "sin")) node = SIN(func_arg);
+        if (!strcasecmp(name, "cos")) node = COS(func_arg);
+        if (!strcasecmp(name, "ln"))  node = LN(func_arg);
+        if (!strcasecmp(name, "exp")) node = EXP(func_arg);
+
+        free(name);
+        return node;
     }
 
     int var_id = find_var(expr, name);
