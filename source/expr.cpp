@@ -59,7 +59,6 @@ int expr_dtor(expr_t* expr)
 
     for (int i = 0; i < expr->var_cnt; i++)
     {
-        printf("COCK\n");
         free(expr->vars[i]->name);
         free(expr->vars[i]);
     }
